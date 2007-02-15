@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Navigating PHP Arrays</TITLE>
+<META NAME="description" CONTENT="Navigating PHP Arrays">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node12.html">
+<LINK REL="previous" HREF="node10.html">
+<LINK REL="up" HREF="node6.html">
+<LINK REL="next" HREF="node12.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html342"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html338"
+  HREF="node6.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html332"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html340"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html343"
+  HREF="node12.html">Additional Examples</A>
+<B> Up:</B> <A NAME="tex2html339"
+  HREF="node6.html">Usage</A>
+<B> Previous:</B> <A NAME="tex2html333"
+  HREF="node10.html">Creating PHP Arrays</A>
+ &nbsp; <B>  <A NAME="tex2html341"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00065000000000000000">
+Navigating PHP Arrays</A>
+</H2>
+
+<P>
+Exploring the contents of <code>php_array</code> objects in C++ requires the use of the <code>php_iterator</code> class. This class must be initialized with a specific array and has an additional optional boolean argument for type warnings much like the base <code>php</code> class.
+
+<P>
+<BLOCKQUOTE>
+<code>php_iterator it(a);</code>
+
+</BLOCKQUOTE>
+
+<P>
+Just initializing the iterator causes it to jump to the first element in the array with a call to <code>go_to_start</code> but it is also possible to start at the end by calling <code>go_to_end</code>. These functions can also be used to reset the position of the iterator at any point during execution.
+
+<P>
+The <code>++</code> and <code>--</code> operators are used to navigate forward and backwards in the array a single element at a time and the <code>done</code> function is used to check for when the iterator has gone beyond the boundary of the <code>php_array</code> in any direction.
+
+<P><PRE>
+int count = 0;
+while(!it.done()){
+  count++;
+  it++;
+}
+</PRE>
+
+<P>
+At the end of this loop the value of <code>count</code> should be the same as the return of a call to the <code>size</code> function of the <code>it</code> object. 
+
+<P>
+Navigation wouldn't be very useful without the ability to get data back out of the array. However, since any entry could contain data of any type, there are functions for checking the type of key and type of data at each element. See Table 2 for a list of all supported and unsupported types.
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<A NAME="Table2"></A>
+<DIV ALIGN="CENTER">
+<A NAME="586"></A>
+<TABLE CELLPADDING=3 BORDER="1">
+<CAPTION><STRONG>Table 2:</STRONG>
+<TT>php_type</TT> values</CAPTION>
+<TR><TD ALIGN="LEFT">Supported</TD>
+<TD ALIGN="LEFT">Unsupported</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><code>IS_LONG</code></TD>
+<TD ALIGN="LEFT"><code>IS_NULL</code></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><code>IS_DOUBLE</code></TD>
+<TD ALIGN="LEFT"><code>IS_OBJECT</code></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><code>IS_STRING</code></TD>
+<TD ALIGN="LEFT"><code>IS_RESOURCE</code></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><code>IS_BOOL</code></TD>
+<TD ALIGN="LEFT"><code>IS_CONSTANT</code></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><code>IS_ARRAY</code></TD>
+<TD ALIGN="LEFT">anything else</TD>
+</TR>
+</TABLE>
+</DIV>
+</DIV>
+<BR>
+
+<P>
+By using the type information the current position of the iterator, the data can be safely interpreted. <I>NOTE:</I> While the data at any array element could be any of the types listed in Table 2, keys can only be of type <code>IS_STRING</code> or <code>IS_LONG</code>. Consider the following code which prints out the key and value types and data for the last object in a iterator (doing nothing if the array is empty).
+
+<P><PRE>
+it.go_to_end();
+if(!it.done()){
+  switch(it.get_key_type()){
+    case IS_LONG:
+      printf("long %ld =&gt; ", it.get_key_long());
+      break;
+    case IS_STRING:
+      printf("string %s =&gt; ", it.get_key_c_string());
+      break;
+    default:
+      printf("??? %s =&gt; ", it.get_key_c_string());
+      break;
+    }
+
+  switch(it.get_data_type()){
+    case IS_LONG:
+      printf("long %ld\n", it.get_data_long());
+      break;
+    case IS_STRING:
+      printf("string %s\n", it.get_data_c_string());
+      break;
+    case IS_DOUBLE:
+      printf("double %f\n", it.get_data_double());
+      break;
+    case IS_BOOL:
+      printf("bool %s\n", it.get_data_c_string());
+      break;
+    case IS_ARRAY:
+      printf("Array\n");
+      {
+        php_array suba = it.get_data_array();
+        php_iterator subit(suba);
+        // now iterate on the sub array
+      }
+      break;
+    default:
+      printf("??? %s\n", it.get_data_c_string());
+      break;
+  }
+}
+</PRE>
+
+<P>
+Note that in several cases PHP type conversion is used to get the data in a C-Style string even when it has a known type. For boolean values this makes sense for output since C++ would only print 0 or 1 if the data were printed as an integer. It also works with the data of unknown type since those must include a mechanism for printing as a string and will provide better insight into what data was provided such as a resource of or an object name. Of course, since it is only printing the data underneath it anyways this code could also just ignore the type of the data underlying entirely and always print the C style string data, but that wouldn't make a very informative example.
+
+<P>
+Observe also in the above example that in the case that the data is an array a new <code>php_array</code> object is created and initialized to that sub array. Unlike the majority of operations in PHPEmbed, the sub array <code>suba</code> is actually a reference to the same data that exists in the <code>a</code> object so mutating it by using the <code>add</code> or <code>remove</code> methods of <code>php_array</code> will affect both <code>suba</code> and <code>a</code>. 
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html342"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html338"
+  HREF="node6.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html332"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html340"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html343"
+  HREF="node12.html">Additional Examples</A>
+<B> Up:</B> <A NAME="tex2html339"
+  HREF="node6.html">Usage</A>
+<B> Previous:</B> <A NAME="tex2html333"
+  HREF="node10.html">Creating PHP Arrays</A>
+ &nbsp; <B>  <A NAME="tex2html341"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>

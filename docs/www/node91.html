@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>php_stl::call_string_uint_hash_map</TITLE>
+<META NAME="description" CONTENT="php_stl::call_string_uint_hash_map">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node92.html">
+<LINK REL="previous" HREF="node90.html">
+<LINK REL="up" HREF="node18.html">
+<LINK REL="next" HREF="node92.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1377"
+  HREF="node92.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1373"
+  HREF="node18.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1367"
+  HREF="node90.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1375"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1378"
+  HREF="node92.html">php_type</A>
+<B> Up:</B> <A NAME="tex2html1374"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html1368"
+  HREF="node90.html">php_stl::call_string_int_hash_map</A>
+ &nbsp; <B>  <A NAME="tex2html1376"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000873000000000000000">
+<TT>php_stl::call_string_uint_hash_map</TT></A>
+</H2>
+
+<P>
+<PRE>
+#include "php_stl.h"
+
+map&lt;string, unsigned int&gt;
+php::call_string_uint_hash_map(char *fn, char *argspec = "", ...);
+</PRE>
+
+<P>
+<I>Description:</I> Call the PHP function <code>fn</code> with the arguments described by <code>argspec</code> and included as subsequent arguments. If <code>argspec</code> is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a <code>string</code> or a value in the array to an <code>unsigned int</code> it may generate a type mismatch warning if those warnings are enabled. <I>NOTE:</I> Since all numeric values in PHP are of type <code>long</code>, this function simply typecasts each value from <code>long</code> to <code>unsigned int</code> in C++.
+
+<P>
+<I>Errors:</I> It is an error for the number of arguments described in <code>argspec</code> to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in <code>argspec</code>(see Table 1 on page&nbsp;<A HREF="node9.html#Table1"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/local/share/lib/latex2html/icons/crossref.png"></A> for details). If the value returned by PHP is not an array <code>call_string_uint_hash_map</code> will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the <code>status</code> flag (see <code>php::status</code>) being set to a nonzero value.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1377"
+  HREF="node92.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1373"
+  HREF="node18.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1367"
+  HREF="node90.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1375"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1378"
+  HREF="node92.html">php_type</A>
+<B> Up:</B> <A NAME="tex2html1374"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html1368"
+  HREF="node90.html">php_stl::call_string_int_hash_map</A>
+ &nbsp; <B>  <A NAME="tex2html1376"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>

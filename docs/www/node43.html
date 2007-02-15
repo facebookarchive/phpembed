@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>php_iterator</TITLE>
+<META NAME="description" CONTENT="php_iterator">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node44.html">
+<LINK REL="previous" HREF="node42.html">
+<LINK REL="up" HREF="node18.html">
+<LINK REL="next" HREF="node44.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html801"
+  HREF="node44.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html797"
+  HREF="node18.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html791"
+  HREF="node42.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html799"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html802"
+  HREF="node44.html">php_iterator::done</A>
+<B> Up:</B> <A NAME="tex2html798"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html792"
+  HREF="node42.html">php_array::remove</A>
+ &nbsp; <B>  <A NAME="tex2html800"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000825000000000000000">
+<TT>php_iterator</TT></A>
+</H2>
+
+<P>
+<PRE>
+#include "php_arr.h"
+
+class php_iterator {
+public:
+  php_iterator(php_array &amp;a, bool type_warnings = false);
+  ~php_iterator();
+  ...
+};
+</PRE>
+
+<P>
+<I>Description:</I> The <code>php_iterator</code> object provides access to the keys and values stored in a <code>php_array</code> object. The required <code>php_array a</code> argument is the array this iterator will provide access to. The <code>type_warnings</code> value is optional and defaults to <code>false</code>. If set to <code>true</code> the iterator will write an error to stderr when it is forced to use convert a key or value into the required C++ data type.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>

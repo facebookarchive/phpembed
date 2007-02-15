@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Creating PHP Arrays</TITLE>
+<META NAME="description" CONTENT="Creating PHP Arrays">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node11.html">
+<LINK REL="previous" HREF="node9.html">
+<LINK REL="up" HREF="node6.html">
+<LINK REL="next" HREF="node11.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html330"
+  HREF="node11.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html326"
+  HREF="node6.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html320"
+  HREF="node9.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html328"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html331"
+  HREF="node11.html">Navigating PHP Arrays</A>
+<B> Up:</B> <A NAME="tex2html327"
+  HREF="node6.html">Usage</A>
+<B> Previous:</B> <A NAME="tex2html321"
+  HREF="node9.html">Passing Arguments</A>
+ &nbsp; <B>  <A NAME="tex2html329"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00064000000000000000">
+Creating PHP Arrays</A>
+</H2>
+
+<P>
+As long as the program has included either <code>php_cxx.h</code>, <code>php_stl.h</code>, or <code>php_arr.h</code>, a <code>php_array</code> object can be instantiated as follows:
+
+<P><PRE>
+php_array a;
+php_array b(a);
+</PRE>
+
+<P>
+The second <code>php_array</code> object <code>b</code> is created as a deep copy of the first object <code>a</code> although it is a bit pointless in this example as <code>a</code> is still empty.
+
+<P>
+There are three ways to add elements to a <code>php_array</code> in C++ (although just as with PHP, clients aren't limited to using any single method for any <code>php_array</code> object):
+
+<P>
+
+<UL>
+<LI><I>Associative</I> These entries map string values to arbitrary PHP values just as <code>$arr["blah"] = $foo</code> maps the string ``blah'' to the value of the variable <code>$foo</code> in a PHP script. 
+</LI>
+<LI><I>Indexed</I> These entries map long values to arbitrary PHP values just as <code>$arr[5] = $foo</code> maps the long 5 to the value of the variable <code>$foo</code> in a PHP script.
+</LI>
+<LI><I>Enumerated</I> These entries insert an arbitrary value into the array with the next available index just as <code>$a[] = 5</code> would do with the value 5 in a PHP script.
+</LI>
+</UL>
+
+<P>
+Inserting data into the <code>php_array</code> uses the same mechanism as passing arguments to PHP functions. Refer to Table 1 on page&nbsp;<A HREF="node9.html#Table1"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/local/share/lib/latex2html/icons/crossref.png"></A> for the list of argument specifiers. 
+
+<P><PRE>
+a.add("l", 5);
+a.add_assoc("slsd", "one", 1, "two", 2.5);
+a.add_index("lsll", 6, "six", 128, 129);
+</PRE>
+
+<P>
+It is important to observe that when adding associative elements each even argument (starting with the 0th element) must be a string. Similarly, when adding indexed elements each even argument (again starting with the 0th element) must be a <code>long</code>.
+
+<P>
+Data can also be removed from the array by associative or numerical index
+
+<P><PRE>
+a.remove(6);
+a.remove("two");
+</PRE>
+
+<P>
+Passing these arrays into PHP as the argument to a function then is as simple as using the <code>php_array</code> argument specifier and passing a reference to the object.
+
+<P>
+<BLOCKQUOTE>
+<code>p.call_void("print_r", "a", &amp;a);</code>
+
+</BLOCKQUOTE>
+
+<P>
+This particular call, in the context of the other code above, produces the following operational output:
+
+<P><PRE>
+My Output: Array
+(
+    [0] =&gt; 5
+    [one] =&gt; 1
+    [128] =&gt; 129
+)
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html330"
+  HREF="node11.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html326"
+  HREF="node6.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html320"
+  HREF="node9.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html328"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html331"
+  HREF="node11.html">Navigating PHP Arrays</A>
+<B> Up:</B> <A NAME="tex2html327"
+  HREF="node6.html">Usage</A>
+<B> Previous:</B> <A NAME="tex2html321"
+  HREF="node9.html">Passing Arguments</A>
+ &nbsp; <B>  <A NAME="tex2html329"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>PHPEmbed</TITLE>
+<META NAME="description" CONTENT="PHPEmbed">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node1.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html16"
+  HREF="node1.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev_g.png"> 
+<A NAME="tex2html14"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html17"
+  HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A NAME="tex2html15"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<P>
+<H1 ALIGN="CENTER">PHPEmbed</H1>
+<DIV>
+
+<P ALIGN="CENTER"><STRONG><A NAME="tex2html1"
+  HREF="http://www.facebook.com/p/Andrew_Boz_Bosworth/1681">Andrew Bosworth</A>, <A NAME="tex2html2"
+  HREF="http://www.facebook.com/p/Brian_Shire/10039877">Brian Shire</A>, <A NAME="tex2html3"
+  HREF="http://www.facebook.com">Facebook, inc</A></STRONG></P>
+</DIV>
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"></A>
+
+<UL>
+<LI><A NAME="tex2html18"
+  HREF="node1.html">Contents</A>
+<LI><A NAME="tex2html19"
+  HREF="node2.html">Motivation</A>
+<LI><A NAME="tex2html20"
+  HREF="node3.html">Design</A>
+<LI><A NAME="tex2html21"
+  HREF="node4.html">Download</A>
+<LI><A NAME="tex2html22"
+  HREF="node5.html">Installation</A>
+<LI><A NAME="tex2html23"
+  HREF="node6.html">Usage</A>
+<UL>
+<LI><A NAME="tex2html24"
+  HREF="node7.html">Initializing</A>
+<LI><A NAME="tex2html25"
+  HREF="node8.html">Calling functions</A>
+<LI><A NAME="tex2html26"
+  HREF="node9.html">Passing Arguments</A>
+<LI><A NAME="tex2html27"
+  HREF="node10.html">Creating PHP Arrays</A>
+<LI><A NAME="tex2html28"
+  HREF="node11.html">Navigating PHP Arrays</A>
+<LI><A NAME="tex2html29"
+  HREF="node12.html">Additional Examples</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html30"
+  HREF="node13.html">Frequently Asked Questions</A>
+<UL>
+<LI><A NAME="tex2html31"
+  HREF="node14.html"><I>Why not use macros instead of repeating so much code?</I></A>
+<LI><A NAME="tex2html32"
+  HREF="node15.html"><I>Why do I keep running out of memory?</I></A>
+<LI><A NAME="tex2html33"
+  HREF="node16.html"><I>Can I have multiple instances of PHPEmbed in one program?</I></A>
+<LI><A NAME="tex2html34"
+  HREF="node17.html"><I>Will this library work on my platform?</I></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html35"
+  HREF="node18.html">Function Reference</A>
+<UL>
+<LI><A NAME="tex2html36"
+  HREF="node19.html"><TT>php</TT></A>
+<LI><A NAME="tex2html37"
+  HREF="node20.html"><TT>php::call_bool</TT></A>
+<LI><A NAME="tex2html38"
+  HREF="node21.html"><TT>php::call_bool_arr</TT></A>
+<LI><A NAME="tex2html39"
+  HREF="node22.html"><TT>php::call_c_string</TT></A>
+<LI><A NAME="tex2html40"
+  HREF="node23.html"><TT>php::call_c_string_arr</TT></A>
+<LI><A NAME="tex2html41"
+  HREF="node24.html"><TT>php::call_double</TT></A>
+<LI><A NAME="tex2html42"
+  HREF="node25.html"><TT>php::call_double_arr</TT></A>
+<LI><A NAME="tex2html43"
+  HREF="node26.html"><TT>php::call_int_array</TT></A>
+<LI><A NAME="tex2html44"
+  HREF="node27.html"><TT>php::call_long</TT></A>
+<LI><A NAME="tex2html45"
+  HREF="node28.html"><TT>php::call_long_array</TT></A>
+<LI><A NAME="tex2html46"
+  HREF="node29.html"><TT>php::call_php_array</TT></A>
+<LI><A NAME="tex2html47"
+  HREF="node30.html"><TT>php::call_uint_array</TT></A>
+<LI><A NAME="tex2html48"
+  HREF="node31.html"><TT>php::call_void</TT></A>
+<LI><A NAME="tex2html49"
+  HREF="node32.html"><TT>php::eval_string</TT></A>
+<LI><A NAME="tex2html50"
+  HREF="node33.html"><TT>php::load</TT></A>
+<LI><A NAME="tex2html51"
+  HREF="node34.html"><TT>php::set_error_function</TT></A>
+<LI><A NAME="tex2html52"
+  HREF="node35.html"><TT>php::set_message_function</TT></A>
+<LI><A NAME="tex2html53"
+  HREF="node36.html"><TT>php::set_output_function</TT></A>
+<LI><A NAME="tex2html54"
+  HREF="node37.html"><TT>php::status</TT></A>
+<LI><A NAME="tex2html55"
+  HREF="node38.html"><TT>php_array</TT></A>
+<LI><A NAME="tex2html56"
+  HREF="node39.html"><TT>php_array::add</TT></A>
+<LI><A NAME="tex2html57"
+  HREF="node40.html"><TT>php_array::add_assoc</TT></A>
+<LI><A NAME="tex2html58"
+  HREF="node41.html"><TT>php_array::add_index</TT></A>
+<LI><A NAME="tex2html59"
+  HREF="node42.html"><TT>php_array::remove</TT></A>
+<LI><A NAME="tex2html60"
+  HREF="node43.html"><TT>php_iterator</TT></A>
+<LI><A NAME="tex2html61"
+  HREF="node44.html"><TT>php_iterator::done</TT></A>
+<LI><A NAME="tex2html62"
+  HREF="node45.html"><TT>php_iterator::get_data_type</TT></A>
+<LI><A NAME="tex2html63"
+  HREF="node46.html"><TT>php_iterator::get_data_c_string</TT></A>
+<LI><A NAME="tex2html64"
+  HREF="node47.html"><TT>php_iterator::get_data_double</TT></A>
+<LI><A NAME="tex2html65"
+  HREF="node48.html"><TT>php_iterator::get_data_long</TT></A>
+<LI><A NAME="tex2html66"
+  HREF="node49.html"><TT>php_iterator::get_data_bool</TT></A>
+<LI><A NAME="tex2html67"
+  HREF="node50.html"><TT>php_iterator::get_data_array</TT></A>
+<LI><A NAME="tex2html68"
+  HREF="node51.html"><TT>php_iterator::get_key_type</TT></A>
+<LI><A NAME="tex2html69"
+  HREF="node52.html"><TT>php_iterator::get_key_c_string</TT></A>
+<LI><A NAME="tex2html70"
+  HREF="node53.html"><TT>php_iterator::get_key_long</TT></A>
+<LI><A NAME="tex2html71"
+  HREF="node54.html"><TT>php_iterator::go_to_end</TT></A>
+<LI><A NAME="tex2html72"
+  HREF="node55.html"><TT>php_iterator::go_to_start</TT></A>
+<LI><A NAME="tex2html73"
+  HREF="node56.html"><TT>php_iterator::operator-</TT></A>
+<LI><A NAME="tex2html74"
+  HREF="node57.html"><TT>php_iterator::operator++</TT></A>
+<LI><A NAME="tex2html75"
+  HREF="node58.html"><TT>php_iterator::size</TT></A>
+<LI><A NAME="tex2html76"
+  HREF="node59.html"><TT>php_ret</TT></A>
+<LI><A NAME="tex2html77"
+  HREF="node60.html"><TT>php_stl</TT></A>
+<LI><A NAME="tex2html78"
+  HREF="node61.html"><TT>php_stl::call_string</TT></A>
+<LI><A NAME="tex2html79"
+  HREF="node62.html"><TT>php_stl::call_string_vector</TT></A>
+<LI><A NAME="tex2html80"
+  HREF="node63.html"><TT>php_stl::call_double_vector</TT></A>
+<LI><A NAME="tex2html81"
+  HREF="node64.html"><TT>php_stl::call_long_vector</TT></A>
+<LI><A NAME="tex2html82"
+  HREF="node65.html"><TT>php_stl::call_bool_vector</TT></A>
+<LI><A NAME="tex2html83"
+  HREF="node66.html"><TT>php_stl::call_int_vector</TT></A>
+<LI><A NAME="tex2html84"
+  HREF="node67.html"><TT>php_stl::call_uint_vector</TT></A>
+<LI><A NAME="tex2html85"
+  HREF="node68.html"><TT>php_stl::call_string_set</TT></A>
+<LI><A NAME="tex2html86"
+  HREF="node69.html"><TT>php_stl::call_double_set</TT></A>
+<LI><A NAME="tex2html87"
+  HREF="node70.html"><TT>php_stl::call_long_set</TT></A>
+<LI><A NAME="tex2html88"
+  HREF="node71.html"><TT>php_stl::call_int_set</TT></A>
+<LI><A NAME="tex2html89"
+  HREF="node72.html"><TT>php_stl::call_uint_set</TT></A>
+<LI><A NAME="tex2html90"
+  HREF="node73.html"><TT>php_stl::call_string_hash_set</TT></A>
+<LI><A NAME="tex2html91"
+  HREF="node74.html"><TT>php_stl::call_string_string_map</TT></A>
+<LI><A NAME="tex2html92"
+  HREF="node75.html"><TT>php_stl::call_string_double_map</TT></A>
+<LI><A NAME="tex2html93"
+  HREF="node76.html"><TT>php_stl::call_string_long_map</TT></A>
+<LI><A NAME="tex2html94"
+  HREF="node77.html"><TT>php_stl::call_string_bool_map</TT></A>
+<LI><A NAME="tex2html95"
+  HREF="node78.html"><TT>php_stl::call_string_int_map</TT></A>
+<LI><A NAME="tex2html96"
+  HREF="node79.html"><TT>php_stl::call_string_uint_map</TT></A>
+<LI><A NAME="tex2html97"
+  HREF="node80.html"><TT>php_stl::call_long_string_map</TT></A>
+<LI><A NAME="tex2html98"
+  HREF="node81.html"><TT>php_stl::call_long_double_map</TT></A>
+<LI><A NAME="tex2html99"
+  HREF="node82.html"><TT>php_stl::call_long_long_map</TT></A>
+<LI><A NAME="tex2html100"
+  HREF="node83.html"><TT>php_stl::call_long_bool_map</TT></A>
+<LI><A NAME="tex2html101"
+  HREF="node84.html"><TT>php_stl::call_long_int_map</TT></A>
+<LI><A NAME="tex2html102"
+  HREF="node85.html"><TT>php_stl::call_long_uint_map</TT></A>
+<LI><A NAME="tex2html103"
+  HREF="node86.html"><TT>php_stl::call_string_string_hash_map</TT></A>
+<LI><A NAME="tex2html104"
+  HREF="node87.html"><TT>php_stl::call_string_double_hash_map</TT></A>
+<LI><A NAME="tex2html105"
+  HREF="node88.html"><TT>php_stl::call_string_long_hash_map</TT></A>
+<LI><A NAME="tex2html106"
+  HREF="node89.html"><TT>php_stl::call_string_bool_hash_map</TT></A>
+<LI><A NAME="tex2html107"
+  HREF="node90.html"><TT>php_stl::call_string_int_hash_map</TT></A>
+<LI><A NAME="tex2html108"
+  HREF="node91.html"><TT>php_stl::call_string_uint_hash_map</TT></A>
+<LI><A NAME="tex2html109"
+  HREF="node92.html"><TT>php_type</TT></A>
+<LI><A NAME="tex2html110"
+  HREF="node93.html"><TT>php_tok</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html111"
+  HREF="node94.html">License and Copyright</A>
+<LI><A NAME="tex2html112"
+  HREF="node95.html">Contact</A>
+<LI><A NAME="tex2html113"
+  HREF="node96.html">About this document ...</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Why do I keep running out of memory?</TITLE>
+<META NAME="description" CONTENT="Why do I keep running out of memory?">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node16.html">
+<LINK REL="previous" HREF="node14.html">
+<LINK REL="up" HREF="node13.html">
+<LINK REL="next" HREF="node16.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html392"
+  HREF="node16.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html388"
+  HREF="node13.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html382"
+  HREF="node14.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html390"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html393"
+  HREF="node16.html">Can I have multiple</A>
+<B> Up:</B> <A NAME="tex2html389"
+  HREF="node13.html">Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html383"
+  HREF="node14.html">Why not use macros</A>
+ &nbsp; <B>  <A NAME="tex2html391"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00072000000000000000">
+<I>Why do I keep running out of memory?</I></A>
+</H2>
+PHP rarely runs beyond its memory limit in apache because the instance only lives for the time it takes to serve one page and then that thread dies and the memory is freed. The embedded environment, however, sticks around and hence requires vigilance around declaring variables in global scope and failing to clean them up with unset. Additionally, it may help to increase the allowed operating memory by using the <code>ini_set</code> function before loading any PHP scripts, for example: <code>ini_set('memory_limit', '100M');</code>
+
+<P>
+There are also a few known leaks in the PHP core, using the builtin PHP function <code>memory_get_usage()</code> in conjunction with the <code>memory_limit</code> ini setting will enable any client of PHPEmbed to predict a memory problem before it affects program operation and handle it as appropriate, for example by destroying the PHP object and recreating it.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>

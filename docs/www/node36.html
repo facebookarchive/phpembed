@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>php::set_output_function</TITLE>
+<META NAME="description" CONTENT="php::set_output_function">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node37.html">
+<LINK REL="previous" HREF="node35.html">
+<LINK REL="up" HREF="node18.html">
+<LINK REL="next" HREF="node37.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html717"
+  HREF="node37.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html713"
+  HREF="node18.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html707"
+  HREF="node35.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html715"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html718"
+  HREF="node37.html">php::status</A>
+<B> Up:</B> <A NAME="tex2html714"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html708"
+  HREF="node35.html">php::set_message_function</A>
+ &nbsp; <B>  <A NAME="tex2html716"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000818000000000000000">
+<TT>php::set_output_function</TT></A>
+</H2>
+
+<P>
+<PRE>
+#include "php_cxx.h"
+
+void 
+set_output_function(void (*output_function)(const char *));
+</PRE>
+
+<P>
+<I>Description:</I> This function controls the behavior of operational output from the <code>php</code> object. This class of output contains all the strings produced in PHP by such commands as <code>echo</code>, <code>print</code>, or <code>printf</code>. The default behavior of the <code>php</code> libraries is to print these strings to stdout prepended with the string ``PHP OUTPUT:''. <I>NOTE:</I> Due to its primarily application as a hypertext processor the default behavior in PHP is to only flush the output buffer when the PHP interpreter is destroyed; to get the output flushed sooner use the PHP function <code>ob_flush()</code>. If set, <code>php</code> will call <code>output_function</code> with a <code>const char *</code> string containing the output.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>

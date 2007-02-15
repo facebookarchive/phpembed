@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Passing Arguments</TITLE>
+<META NAME="description" CONTENT="Passing Arguments">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node10.html">
+<LINK REL="previous" HREF="node8.html">
+<LINK REL="up" HREF="node6.html">
+<LINK REL="next" HREF="node10.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html318"
+  HREF="node10.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html314"
+  HREF="node6.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html308"
+  HREF="node8.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html316"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html319"
+  HREF="node10.html">Creating PHP Arrays</A>
+<B> Up:</B> <A NAME="tex2html315"
+  HREF="node6.html">Usage</A>
+<B> Previous:</B> <A NAME="tex2html309"
+  HREF="node8.html">Calling functions</A>
+ &nbsp; <B>  <A NAME="tex2html317"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00063000000000000000">
+Passing Arguments</A>
+</H2>
+
+<P>
+Passing C++ arguments into PHP in PHPEmbed works much like passing format arguments into <code>printf</code>. The caller must provide a format string which identifies the type of each argument to follow and then follow it with arguments matching in number and type to those specified. Table 1 below provides the argument specifiers for each C++ data type. <I>Note that C-style strings (</I><code>char *</code><I>) must be null terminated and that </I><code>php_array</code><I> objects are passed by reference.)</I>
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER">
+<A NAME="Table1"></A>
+<DIV ALIGN="CENTER">
+<A NAME="61"></A>
+<TABLE CELLPADDING=3 BORDER="1">
+<CAPTION><STRONG>Table 1:</STRONG>
+PHPEmbed argument specifiers</CAPTION>
+<TR><TD ALIGN="RIGHT"><code>s</code></TD>
+<TD ALIGN="LEFT"><code>char *</code></TD>
+</TR>
+<TR><TD ALIGN="RIGHT"><code>i</code></TD>
+<TD ALIGN="LEFT"><code>int</code></TD>
+</TR>
+<TR><TD ALIGN="RIGHT"><code>l</code></TD>
+<TD ALIGN="LEFT"><code>long</code></TD>
+</TR>
+<TR><TD ALIGN="RIGHT"><code>d</code></TD>
+<TD ALIGN="LEFT"><code>double</code></TD>
+</TR>
+<TR><TD ALIGN="RIGHT"><code>b</code></TD>
+<TD ALIGN="LEFT"><code>bool</code></TD>
+</TR>
+<TR><TD ALIGN="RIGHT"><code>a</code></TD>
+<TD ALIGN="LEFT"><code>php_array *</code></TD>
+</TR>
+</TABLE>
+</DIV>
+</DIV>
+<BR>
+
+<P>
+In the following example, two strings and an integer are passed into PHP and a long is returned from the PHP builtin <code>strncmp</code> which behaves like the standard C function of the same name.
+
+<P><PRE>
+char *one = "test1";
+int comp = 4;
+long match = p.call_long("strncmp", "ssi", one, "test2", comp);
+</PRE>
+
+<P>
+The result should be 0 (indicating a match) even through the strings are different because this code compares only the first four characters.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html318"
+  HREF="node10.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html314"
+  HREF="node6.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html308"
+  HREF="node8.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html316"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html319"
+  HREF="node10.html">Creating PHP Arrays</A>
+<B> Up:</B> <A NAME="tex2html315"
+  HREF="node6.html">Usage</A>
+<B> Previous:</B> <A NAME="tex2html309"
+  HREF="node8.html">Calling functions</A>
+ &nbsp; <B>  <A NAME="tex2html317"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>

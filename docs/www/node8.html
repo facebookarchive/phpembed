@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Calling functions</TITLE>
+<META NAME="description" CONTENT="Calling functions">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node9.html">
+<LINK REL="previous" HREF="node7.html">
+<LINK REL="up" HREF="node6.html">
+<LINK REL="next" HREF="node9.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html306"
+  HREF="node9.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html302"
+  HREF="node6.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html296"
+  HREF="node7.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html304"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html307"
+  HREF="node9.html">Passing Arguments</A>
+<B> Up:</B> <A NAME="tex2html303"
+  HREF="node6.html">Usage</A>
+<B> Previous:</B> <A NAME="tex2html297"
+  HREF="node7.html">Initializing</A>
+ &nbsp; <B>  <A NAME="tex2html305"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00062000000000000000">
+Calling functions</A>
+</H2>
+
+<P>
+C++ is a strongly typed language so the interface with a weakly typed language like PHP requires that types be called out explicitly. Polymorphism in C++ requires that functions of the same name vary in argument signature (just changing the return type isn't enough). As a consequence there are a host of functions where the return type expected is specified in the function name such as <code>call_void</code>, <code>call_bool</code>, <code>call_double_arr</code>, and <code>call_string_string_hash_map</code>. Here is an example of usage:
+
+<P><PRE>
+long memused = p.call_long("memory_get_usage");
+hash_set&lt;string&gt; ex;
+ex = p.call_string_hash_set("get_loaded_extensions");
+</PRE>
+
+<P>
+In the first call the PHP builtin function <code>memory_get_usage</code> is invoked which takes no arguments and returns the number of bytes currently allocated internally by the PHP interpreter. Observe that there are no parens in the function name. The return is given in a <code>long</code>, which is the default numeric type for PHP. <I>NOTE:</I> Any function calls that return bool, int, or unsigned int are really returning a long and the <code>php</code> object is just typecasting in C++.
+
+<P>
+The second call demonstrates that it is no more difficult to take advantage of the more complex return types. The PHP builtin <code>get_loaded_extensions</code>  will return an array of the names of all the extensions loaded into the current build of PHP which is then converted into a <code>hash_set</code>. See the Function Reference section for a list of all the functions available.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html306"
+  HREF="node9.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html302"
+  HREF="node6.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html296"
+  HREF="node7.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html304"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html307"
+  HREF="node9.html">Passing Arguments</A>
+<B> Up:</B> <A NAME="tex2html303"
+  HREF="node6.html">Usage</A>
+<B> Previous:</B> <A NAME="tex2html297"
+  HREF="node7.html">Initializing</A>
+ &nbsp; <B>  <A NAME="tex2html305"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>

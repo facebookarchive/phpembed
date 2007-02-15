@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Motivation</TITLE>
+<META NAME="description" CONTENT="Motivation">
+<META NAME="keywords" CONTENT="phpembed">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="phpembed.css">
+
+<LINK REL="next" HREF="node3.html">
+<LINK REL="previous" HREF="node1.html">
+<LINK REL="up" HREF="phpembed.html">
+<LINK REL="next" HREF="node3.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html228"
+  HREF="node3.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html224"
+  HREF="phpembed.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html218"
+  HREF="node1.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html226"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html229"
+  HREF="node3.html">Design</A>
+<B> Up:</B> <A NAME="tex2html225"
+  HREF="phpembed.html">PHPEmbed</A>
+<B> Previous:</B> <A NAME="tex2html219"
+  HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A NAME="tex2html227"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00020000000000000000">
+Motivation</A>
+</H1>
+
+<P>
+PHP has solidified itself as the language of choice for many top internet properties largely due to its ease of use and seamless integration with apache and MySQL. It is also a fine scripting language for quick and easy data consumption or modification. Despite its suitability for web development and scripting, PHP is generally not the best choice for most standalone programs or servers. Unfortunately, when there are many developers actively maintaining a PHP code base for a website it creates a dangerous dependency to have a separate code path to the data layer in another language. If the cache keys or database schema were to change in the PHP code base then the corollary compiled program would be broken (and potentially corrupting data) until the code was updated and the program recompiled and restarted.
+
+<P>
+Faced with this problem we endeavored to embed the PHP Interpreter into C++ binaries. This isn't a novel endeavor by any means; the aforementioned seamless Apache integration uses the PHP Server API (SAPI) to accomplish exactly that. However, when we began attempting integration of our own we found that the SAPI required quite a bit of expertise to manipulate effectively.
+
+<P>
+In order to make embedding PHP truly simple for all of our developers (and indeed the world) we developed this PHPEmbed library which is just a more accessible and simplified API built on top of the PHP SAPI. 
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html228"
+  HREF="node3.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html224"
+  HREF="phpembed.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html218"
+  HREF="node1.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html226"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html229"
+  HREF="node3.html">Design</A>
+<B> Up:</B> <A NAME="tex2html225"
+  HREF="phpembed.html">PHPEmbed</A>
+<B> Previous:</B> <A NAME="tex2html219"
+  HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A NAME="tex2html227"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Andrew Bosworth
+2007-02-08
+</ADDRESS>
+</BODY>
+</HTML>
