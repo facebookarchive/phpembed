@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>php_iterator::get_key_c_string</TITLE>
-<META NAME="description" CONTENT="php_iterator::get_key_c_string">
+<TITLE>php_iterator::get_key_long</TITLE>
+<META NAME="description" CONTENT="php_iterator::get_key_long">
 <META NAME="keywords" CONTENT="phpembed">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -26,49 +26,49 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html909"
+<A NAME="tex2html935"
   HREF="node53.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
-<A NAME="tex2html905"
+<A NAME="tex2html931"
   HREF="node18.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html899"
+<A NAME="tex2html925"
   HREF="node51.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
-<A NAME="tex2html907"
+<A NAME="tex2html933"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html910"
-  HREF="node53.html">php_iterator::get_key_long</A>
-<B> Up:</B> <A NAME="tex2html906"
+<B> Next:</B> <A NAME="tex2html936"
+  HREF="node53.html">php_iterator::get_key_type</A>
+<B> Up:</B> <A NAME="tex2html932"
   HREF="node18.html">Function Reference</A>
-<B> Previous:</B> <A NAME="tex2html900"
-  HREF="node51.html">php_iterator::get_key_type</A>
- &nbsp; <B>  <A NAME="tex2html908"
+<B> Previous:</B> <A NAME="tex2html926"
+  HREF="node51.html">php_iterator::get_key_c_string</A>
+ &nbsp; <B>  <A NAME="tex2html934"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000834000000000000000">
-<TT>php_iterator::get_key_c_string</TT></A>
+<TT>php_iterator::get_key_long</TT></A>
 </H2>
 
 <P>
 <PRE>
 #include "php_arr.h"
 
-char *
-php_iterator::get_key_c_string();
+long 
+php_iterator::get_key_long();
 </PRE>
 
 <P>
-<I>Description:</I> Return the key of the element at the current iterator position as a <code>char *</code>. If type conversion is necessary it may generate a type mismatch warning if those warnings are enabled.
+<I>Description:</I> Return the key of the element at the current iterator position as a <code>long</code>. If type conversion is necessary it may generate a type mismatch warning if those warnings are enabled.
 
 <P>
 <I>Errors:</I> It is an error to call this function on an iterator in an invalid position (see <code>php_iterator::done</code>).
@@ -77,7 +77,7 @@ php_iterator::get_key_c_string();
 <BR><HR>
 <ADDRESS>
 Andrew Bosworth
-2007-02-08
+2007-02-27
 </ADDRESS>
 </BODY>
 </HTML>

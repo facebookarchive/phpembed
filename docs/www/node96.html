@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>About this document ...</TITLE>
-<META NAME="description" CONTENT="About this document ...">
+<TITLE>php_stl::call_string_uint_map</TITLE>
+<META NAME="description" CONTENT="php_stl::call_string_uint_map">
 <META NAME="keywords" CONTENT="phpembed">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -18,61 +18,94 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="phpembed.css">
 
+<LINK REL="next" HREF="node97.html">
 <LINK REL="previous" HREF="node95.html">
-<LINK REL="up" HREF="phpembed.html">
+<LINK REL="up" HREF="node18.html">
+<LINK REL="next" HREF="node97.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
+<A NAME="tex2html1463"
+  HREF="node97.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="file:/usr/local/share/lib/latex2html/icons/next_g.png"> 
-<A NAME="tex2html1429"
-  HREF="phpembed.html">
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1459"
+  HREF="node18.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html1425"
+<A NAME="tex2html1453"
   HREF="node95.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
-<A NAME="tex2html1431"
+<A NAME="tex2html1461"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
-<B> Up:</B> <A NAME="tex2html1430"
-  HREF="phpembed.html">PHPEmbed</A>
-<B> Previous:</B> <A NAME="tex2html1426"
-  HREF="node95.html">Contact</A>
- &nbsp; <B>  <A NAME="tex2html1432"
+<B> Next:</B> <A NAME="tex2html1464"
+  HREF="node97.html">php_stl::call_string_vector</A>
+<B> Up:</B> <A NAME="tex2html1460"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html1454"
+  HREF="node95.html">php_stl::call_string_uint_hash_map</A>
+ &nbsp; <B>  <A NAME="tex2html1462"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION000110000000000000000">
-About this document ...</A>
-</H1>
- <STRONG>PHPEmbed</STRONG><P>
-This document was generated using the
-<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-2-1 (1.70)
+<H2><A NAME="SECTION000878000000000000000">
+<TT>php_stl::call_string_uint_map</TT></A>
+</H2>
+
 <P>
-Copyright &#169; 1993, 1994, 1995, 1996,
-<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
-Computer Based Learning Unit, University of Leeds.
+<PRE>
+#include "php_stl.h"
+
+map&lt;string, unsigned int&gt; 
+php_stl::call_string_uint_map(char *fn, char *argspec = "", ...);
+</PRE>
+
+<P>
+<I>Description:</I> Call the PHP function <code>fn</code> with the arguments described by <code>argspec</code> and included as subsequent arguments. If <code>argspec</code> is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a <code>string</code> or a value in the array to an <code>unsigned int</code> it may generate a type mismatch warning if those warnings are enabled. <I>NOTE:</I> Since all numeric values in PHP are of type <code>long</code>, this function simply typecasts each value from <code>long</code> to <code>unsigned int</code> in C++.
+
+<P>
+<I>Errors:</I> It is an error for the number of arguments described in <code>argspec</code> to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in <code>argspec</code>(see Table 1 on page&nbsp;<A HREF="node9.html#Table1"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/local/share/lib/latex2html/icons/crossref.png"></A> for details). If the value returned by PHP is not an array <code>call_string_uint_map</code> will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the <code>status</code> flag (see <code>php::status</code>) being set to a nonzero value.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1463"
+  HREF="node97.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1459"
+  HREF="node18.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1453"
+  HREF="node95.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1461"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
-Copyright &#169; 1997, 1998, 1999,
-<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
-Mathematics Department, Macquarie University, Sydney.
-<P>
-The command line arguments were: <BR>
- <STRONG>latex2html</STRONG> <TT><A NAME="tex2html13"
-  HREF="../phpembed.tex">phpembed.tex</A></TT>
-<P>
-The translation was initiated by Andrew Bosworth on 2007-02-08
-<BR><HR>
+<B> Next:</B> <A NAME="tex2html1464"
+  HREF="node97.html">php_stl::call_string_vector</A>
+<B> Up:</B> <A NAME="tex2html1460"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html1454"
+  HREF="node95.html">php_stl::call_string_uint_hash_map</A>
+ &nbsp; <B>  <A NAME="tex2html1462"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Andrew Bosworth
-2007-02-08
+2007-02-27
 </ADDRESS>
 </BODY>
 </HTML>

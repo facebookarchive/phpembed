@@ -709,16 +709,30 @@ php_iterator::done();
 \emph{Description:} Returns \verb|true| if and only if the iterator no longer points to a valid \verb|php_array| element, either because the array is empty or the iterator has been advanced beyond the bounds of the array in either direction.
 
 
-\subsection{\texttt{php\_iterator::get\_data\_type}}
+\subsection{\texttt{php\_iterator::get\_data\_array}}
 
 \begin{verbatim}
 #include "php_arr.h"
 
-php_type 
-php_iterator::get_data_type();
+php_array 
+php_iterator::get_data_array();
 \end{verbatim}
 
-\emph{Description:} Returns the data type of the value at the current position of the iterator. See \verb|php_ret| for the list of types.
+\emph{Description:} Return the value of the element at the current iterator position as a \verb|php_array|. This function can be used in conjunction with an additional iterator to navigate nested arrays. If the value at the current iterator position isn't of type \verb|IS_ARRAY| then this function will return a new \verb|php_array| with a single element whose key is 0 and whose value is the same value and type of the data at the current iterator position and may generate a type mismatch warning if those warnings are enabled. 
+
+\emph{Errors:} It is an error to call this function on an iterator in an invalid position (see \verb|php_iterator::done|).
+
+
+\subsection{\texttt{php\_iterator::get\_data\_bool}}
+
+\begin{verbatim}
+#include "php_arr.h"
+
+bool 
+php_iterator::get_data_bool();
+\end{verbatim}
+
+\emph{Description:} Return the value of the element at the current iterator position as a \verb|bool|. If type conversion is necessary it may generate a type mismatch warning if those warnings are enabled.
 
 \emph{Errors:} It is an error to call this function on an iterator in an invalid position (see \verb|php_iterator::done|).
 
@@ -765,44 +779,16 @@ php_iterator::get_data_long();
 \emph{Errors:} It is an error to call this function on an iterator in an invalid position (see \verb|php_iterator::done|).
 
 
-\subsection{\texttt{php\_iterator::get\_data\_bool}}
-
-\begin{verbatim}
-#include "php_arr.h"
-
-bool 
-php_iterator::get_data_bool();
-\end{verbatim}
-
-\emph{Description:} Return the value of the element at the current iterator position as a \verb|bool|. If type conversion is necessary it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error to call this function on an iterator in an invalid position (see \verb|php_iterator::done|).
-
-
-\subsection{\texttt{php\_iterator::get\_data\_array}}
-
-\begin{verbatim}
-#include "php_arr.h"
-
-php_array 
-php_iterator::get_data_array();
-\end{verbatim}
-
-\emph{Description:} Return the value of the element at the current iterator position as a \verb|php_array|. This function can be used in conjunction with an additional iterator to navigate nested arrays. If the value at the current iterator position isn't of type \verb|IS_ARRAY| then this function will return a new \verb|php_array| with a single element whose key is 0 and whose value is the same value and type of the data at the current iterator position and may generate a type mismatch warning if those warnings are enabled. 
-
-\emph{Errors:} It is an error to call this function on an iterator in an invalid position (see \verb|php_iterator::done|).
-
-
-\subsection{\texttt{php\_iterator::get\_key\_type}}
+\subsection{\texttt{php\_iterator::get\_data\_type}}
 
 \begin{verbatim}
 #include "php_arr.h"
 
 php_type 
-php_iterator::get_key_type();
+php_iterator::get_data_type();
 \end{verbatim}
 
-\emph{Description:} Return the data type of the key at the current position of the iterator. See \verb|php_ret| for the list of types.
+\emph{Description:} Returns the data type of the value at the current position of the iterator. See \verb|php_ret| for the list of types.
 
 \emph{Errors:} It is an error to call this function on an iterator in an invalid position (see \verb|php_iterator::done|).
 
@@ -831,6 +817,20 @@ php_iterator::get_key_long();
 \end{verbatim}
 
 \emph{Description:} Return the key of the element at the current iterator position as a \verb|long|. If type conversion is necessary it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error to call this function on an iterator in an invalid position (see \verb|php_iterator::done|).
+
+
+\subsection{\texttt{php\_iterator::get\_key\_type}}
+
+\begin{verbatim}
+#include "php_arr.h"
+
+php_type 
+php_iterator::get_key_type();
+\end{verbatim}
+
+\emph{Description:} Return the data type of the key at the current position of the iterator. See \verb|php_ret| for the list of types.
 
 \emph{Errors:} It is an error to call this function on an iterator in an invalid position (see \verb|php_iterator::done|).
 
@@ -927,115 +927,18 @@ public:
 \emph{Errors:} Any errors during initialization will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
-\subsection{\texttt{php\_stl::call\_string}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-string 
-php::call_string(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The value returned by PHP will be interpreted as a \verb|string|. If type conversion is necessary it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_vector}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-vector<string> 
-php::call_string_vector(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be pushed in order onto an STL vector of type \verb|string|. Each time it is necessary to convert a value in the array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_double\_vector}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-vector<double> 
-php::call_double_vector(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values of that array will be put in order an STL vector of type \verb|double|. Each time it is necessary to convert a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_double_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_long\_vector}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-vector<long> 
-php::call_long_vector(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be pushed in order onto an STL vector of type \verb|long|. Each time it is necessary to convert a value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
 \subsection{\texttt{php\_stl::call\_bool\_vector}}
 
 \begin{verbatim}
 #include "php_stl.h"
 
 vector<bool> 
-php::call_bool_vector(char *fn, char *argspec = "", ...);
+php_stl::call_bool_vector(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
 \emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be pushed in order onto an STL vector of type \verb|bool|. Each time it is necessary to convert a value in the array to a \verb|bool| it may generate a type mismatch warning if those warnings are enabled.
 
 \emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_bool_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_int\_vector}}
-\begin{verbatim}
-#include "php_stl.h"
-
-vector<int> 
-php::call_int_vector(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be pushed in order onto an STL vector of type \verb|int|. Each time it is necessary to convert an value in the array to an \verb|int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|int| in C++.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_int_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_uint\_vector}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-vector<unsigned int> 
-php::call_uint_vector(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be pushed in order onto an STL vector of type \verb|unsigned int|. Each time it is necessary to convert a value in the array to an \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|unsigned int| in C++.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_uint_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_set}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-set<string> 
-php::call_string_set(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL set of type \verb|string|. Each time it is necessary to convert a value in the array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
 \subsection{\texttt{php\_stl::call\_double\_set}}
@@ -1044,7 +947,7 @@ php::call_string_set(char *fn, char *argspec = "", ...);
 #include "php_stl.h"
 
 set<double> 
-php::call_double_set(char *fn, char *argspec = "", ...);
+php_stl::call_double_set(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
 \emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL set of type \verb|double|. Each time it is necessary to convert a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
@@ -1052,18 +955,32 @@ php::call_double_set(char *fn, char *argspec = "", ...);
 \emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_double_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
-\subsection{\texttt{php\_stl::call\_long\_set}}
+\subsection{\texttt{php\_stl::call\_double\_vector}}
 
 \begin{verbatim}
 #include "php_stl.h"
 
-set<long> 
-php::call_long_set(char *fn, char *argspec = "", ...);
+vector<double> 
+php_stl::call_double_vector(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL set of type \verb|long|. Each time it is necessary to convert a value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values of that array will be put in order an STL vector of type \verb|double|. Each time it is necessary to convert a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
 
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_double_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_int\_hash\_set}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_set<int> 
+php_stl::call_int_hash_set(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL hash set of type \verb|int|. Each time it is necessary to convert a value in the array to a \verb|int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|int| in C++.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_int_hash_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty hash set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
 \subsection{\texttt{php\_stl::call\_int\_set}}
@@ -1072,7 +989,7 @@ php::call_long_set(char *fn, char *argspec = "", ...);
 #include "php_stl.h"
 
 set<int> 
-php::call_int_set(char *fn, char *argspec = "", ...);
+php_stl::call_int_set(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
 \emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL set of type \verb|int|. Each time it is necessary to convert a value in the array to an \verb|int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|int| in C++.
@@ -1080,158 +997,31 @@ php::call_int_set(char *fn, char *argspec = "", ...);
 \emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_int_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
-\subsection{\texttt{php\_stl::call\_uint\_set}}
+\subsection{\texttt{php\_stl::call\_int\_vector}}
+\begin{verbatim}
+#include "php_stl.h"
+
+vector<int> 
+php_stl::call_int_vector(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be pushed in order onto an STL vector of type \verb|int|. Each time it is necessary to convert an value in the array to an \verb|int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|int| in C++.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_int_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_bool\_hash\_map}}
 
 \begin{verbatim}
 #include "php_stl.h"
 
-set<unsigned int> 
-php::call_uint_set(char *fn, char *argspec = "", ...);
+hash_map<long, bool> 
+php_stl::call_long_bool_hash_map(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL set of type \verb|unsigned int|. Each time it is necessary to convert a value in the array to an \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|unsigned int| in C++.
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to a \verb|bool| it may generate a type mismatch warning if those warnings are enabled.
 
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_uint_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_hash\_set}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-hash_set<string> 
-php::call_string_hash_set(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL hash set of type \verb|string|. Each time it is necessary to convert a value in the array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_hash_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty hash set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_string\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<string, string> 
-php::call_string_string_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key or value in the returned array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_string_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_double\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<string, double> 
-php::call_string_double_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_double_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_long\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<string, long> 
-php::call_string_long_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_long_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_bool\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<string, bool> 
-php::call_string_bool_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|bool| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_bool_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_int\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<string, int> 
-php::call_string_int_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to an \verb|int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|int| in C++.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_int_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_uint\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<string, unsigned int> 
-php::call_string_uint_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to an \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|unsigned int| in C++.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_uint_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_long\_string\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<long, string>
-php::call_long_string_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_string_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_long\_double\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<long, double> 
-php::call_long_double_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_double_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_long\_long\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<long, long> 
-php::call_long_long_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key or value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_long_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_bool_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
 \subsection{\texttt{php\_stl::call\_long\_bool\_map}}
@@ -1240,12 +1030,68 @@ php::call_long_long_map(char *fn, char *argspec = "", ...);
 #include "php_stl.h"
 
 map<long, bool> 
-php::call_long_bool_map(char *fn, char *argspec = "", ...);
+php_stl::call_long_bool_map(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
 \emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to a \verb|bool| it may generate a type mismatch warning if those warnings are enabled.
 
 \emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_bool_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_double\_hash\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_map<long, double> 
+php_stl::call_long_double_hash_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_double_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_double\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+map<long, double> 
+php_stl::call_long_double_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_double_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_hash\_set}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_set<long> 
+php_stl::call_long_hash_set(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL hash set of type \verb|long|. Each time it is necessary to convert a value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_hash_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty hash set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_int\_hash\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_map<long, int> 
+php_stl::call_long_int_hash_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to an \verb|int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|int| in C++.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_int_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
 \subsection{\texttt{php\_stl::call\_long\_int\_map}}
@@ -1254,12 +1100,96 @@ php::call_long_bool_map(char *fn, char *argspec = "", ...);
 #include "php_stl.h"
 
 map<long, int> 
-php::call_long_int_map(char *fn, char *argspec = "", ...);
+php_stl::call_long_int_map(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
 \emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to an \verb|int| it may generate a type mismatch warning if those warnings are enabled.
 
 \emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_int_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_long\_hash\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_map<long, long> 
+php_stl::call_long_long_hash_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key or value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_long_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_long\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+map<long, long> 
+php_stl::call_long_long_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key or value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_long_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_set}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+set<long> 
+php_stl::call_long_set(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL set of type \verb|long|. Each time it is necessary to convert a value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_string\_hash\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_map<long, string> 
+php_stl::call_long_string_hash_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the returned array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_string_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_string\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+map<long, string>
+php_stl::call_long_string_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_string_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_long\_uint\_hash\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_map<long, unsigned int>
+php_stl::call_long_uint_hash_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to an \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|unsigned int| in C++.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_uint_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
 \subsection{\texttt{php\_stl::call\_long\_uint\_map}}
@@ -1268,7 +1198,7 @@ php::call_long_int_map(char *fn, char *argspec = "", ...);
 #include "php_stl.h"
 
 map<long, unsigned int> 
-php::call_long_uint_map(char *fn, char *argspec = "", ...);
+php_stl::call_long_uint_map(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
 \emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|long| or a value in the array to an \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled.
@@ -1276,46 +1206,32 @@ php::call_long_uint_map(char *fn, char *argspec = "", ...);
 \emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_uint_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
-\subsection{\texttt{php\_stl::call\_string\_string\_hash\_map}}
+\subsection{\texttt{php\_stl::call\_long\_vector}}
 
 \begin{verbatim}
 #include "php_stl.h"
 
-map<string, string> 
-php::call_string_string_hash_map(char *fn, char *argspec = "", ...);
+vector<long> 
+php_stl::call_long_vector(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key or value in the returned array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be pushed in order onto an STL vector of type \verb|long|. Each time it is necessary to convert a value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
 
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_string_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_long_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
-\subsection{\texttt{php\_stl::call\_string\_double\_hash\_map}}
+\subsection{\texttt{php\_stl::call\_string}}
 
 \begin{verbatim}
 #include "php_stl.h"
 
-map<string, double> 
-php::call_string_double_hash_map(char *fn, char *argspec = "", ...);
+string 
+php_stl::call_string(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The value returned by PHP will be interpreted as a \verb|string|. If type conversion is necessary it may generate a type mismatch warning if those warnings are enabled.
 
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_double_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
-
-
-\subsection{\texttt{php\_stl::call\_string\_long\_hash\_map}}
-
-\begin{verbatim}
-#include "php_stl.h"
-
-map<string, long> 
-php::call_string_long_hash_map(char *fn, char *argspec = "", ...);
-\end{verbatim}
-
-\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
-
-\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_long_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
 \subsection{\texttt{php\_stl::call\_string\_bool\_hash\_map}}
@@ -1323,8 +1239,8 @@ php::call_string_long_hash_map(char *fn, char *argspec = "", ...);
 \begin{verbatim}
 #include "php_stl.h"
 
-map<string, bool> 
-php::call_string_bool_hash_map(char *fn, char *argspec = "", ...);
+hash_map<string, bool> 
+php_stl::call_string_bool_hash_map(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
 \emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|bool| it may generate a type mismatch warning if those warnings are enabled.
@@ -1332,13 +1248,69 @@ php::call_string_bool_hash_map(char *fn, char *argspec = "", ...);
 \emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_bool_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
+\subsection{\texttt{php\_stl::call\_string\_bool\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+map<string, bool> 
+php_stl::call_string_bool_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|bool| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_bool_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_double\_hash\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_map<string, double> 
+php_stl::call_string_double_hash_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_double_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_double\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+map<string, double> 
+php_stl::call_string_double_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|double| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_double_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_hash\_set}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_set<string> 
+php_stl::call_string_hash_set(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL hash set of type \verb|string|. Each time it is necessary to convert a value in the array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_hash_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty hash set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
 \subsection{\texttt{php\_stl::call\_string\_int\_hash\_map}}
 
 \begin{verbatim}
 #include "php_stl.h"
 
-map<string, int> 
-php::call_string_int_hash_map(char *fn, char *argspec = "", ...);
+hash_map<string, int> 
+php_stl::call_string_int_hash_map(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
 \emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to an \verb|int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|int| in C++.
@@ -1346,18 +1318,172 @@ php::call_string_int_hash_map(char *fn, char *argspec = "", ...);
 \emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_int_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
+\subsection{\texttt{php\_stl::call\_string\_int\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+map<string, int> 
+php_stl::call_string_int_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to an \verb|int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|int| in C++.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_int_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_long\_hash\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_map<string, long> 
+php_stl::call_string_long_hash_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_long_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_long\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+map<string, long> 
+php_stl::call_string_long_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to a \verb|long| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_long_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_set}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+set<string> 
+php_stl::call_string_set(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL set of type \verb|string|. Each time it is necessary to convert a value in the array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_string\_hash\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_map<string, string> 
+php_stl::call_string_string_hash_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key or value in the returned array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_string_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_string\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+map<string, string> 
+php_stl::call_string_string_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key or value in the returned array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_string_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
 \subsection{\texttt{php\_stl::call\_string\_uint\_hash\_map}}
 
 \begin{verbatim}
 #include "php_stl.h"
 
-map<string, unsigned int>
-php::call_string_uint_hash_map(char *fn, char *argspec = "", ...);
+hash_map<string, unsigned int>
+php_stl::call_string_uint_hash_map(char *fn, char *argspec = "", ...);
 \end{verbatim}
 
 \emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to an \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|unsigned int| in C++.
 
 \emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_uint_hash_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_uint\_map}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+map<string, unsigned int> 
+php_stl::call_string_uint_map(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key in the array to a \verb|string| or a value in the array to an \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|unsigned int| in C++.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_uint_map| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_string\_vector}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+vector<string> 
+php_stl::call_string_vector(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be pushed in order onto an STL vector of type \verb|string|. Each time it is necessary to convert a value in the array to a \verb|string| it may generate a type mismatch warning if those warnings are enabled.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_string_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_uint\_hash\_set}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+hash_set<unsigned int> 
+php_stl::call_uint_hash_set(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL hash set of type \verb|unsigned int|. Each time it is necessary to convert a value in the array to a \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|unsigned int| in C++.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_uint_hash_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty hash set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_uint\_set}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+set<unsigned int> 
+php_stl::call_uint_set(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be inserted into an STL set of type \verb|unsigned int|. Each time it is necessary to convert a value in the array to an \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|unsigned int| in C++.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_uint_set| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty set. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
+
+
+\subsection{\texttt{php\_stl::call\_uint\_vector}}
+
+\begin{verbatim}
+#include "php_stl.h"
+
+vector<unsigned int> 
+php_stl::call_uint_vector(char *fn, char *argspec = "", ...);
+\end{verbatim}
+
+\emph{Description:} Call the PHP function \verb|fn| with the arguments described by \verb|argspec| and included as subsequent arguments. If \verb|argspec| is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and the values in that array will be pushed in order onto an STL vector of type \verb|unsigned int|. Each time it is necessary to convert a value in the array to an \verb|unsigned int| it may generate a type mismatch warning if those warnings are enabled. \emph{NOTE:} Since all numeric values in PHP are of type \verb|long|, this function simply typecasts each value from \verb|long| to \verb|unsigned int| in C++.
+
+\emph{Errors:} It is an error for the number of arguments described in \verb|argspec| to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in \verb|argspec|(see Table 1 on page~\pageref{Table1} for details). If the value returned by PHP is not an array \verb|call_uint_vector| will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty vector. Any internal errors during execution will result in the \verb|status| flag (see \verb|php::status|) being set to a nonzero value.
 
 
 \subsection{\texttt{php\_type}}

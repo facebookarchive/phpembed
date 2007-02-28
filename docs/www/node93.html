@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>php_tok</TITLE>
-<META NAME="description" CONTENT="php_tok">
+<TITLE>php_stl::call_string_string_hash_map</TITLE>
+<META NAME="description" CONTENT="php_stl::call_string_string_hash_map">
 <META NAME="keywords" CONTENT="phpembed">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -18,6 +18,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="phpembed.css">
 
+<LINK REL="next" HREF="node94.html">
 <LINK REL="previous" HREF="node92.html">
 <LINK REL="up" HREF="node18.html">
 <LINK REL="next" HREF="node94.html">
@@ -25,48 +26,86 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1399"
+<A NAME="tex2html1427"
   HREF="node94.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
-<A NAME="tex2html1395"
+<A NAME="tex2html1423"
   HREF="node18.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html1391"
+<A NAME="tex2html1417"
   HREF="node92.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
-<A NAME="tex2html1397"
+<A NAME="tex2html1425"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1400"
-  HREF="node94.html">License and Copyright</A>
-<B> Up:</B> <A NAME="tex2html1396"
+<B> Next:</B> <A NAME="tex2html1428"
+  HREF="node94.html">php_stl::call_string_string_map</A>
+<B> Up:</B> <A NAME="tex2html1424"
   HREF="node18.html">Function Reference</A>
-<B> Previous:</B> <A NAME="tex2html1392"
-  HREF="node92.html">php_type</A>
- &nbsp; <B>  <A NAME="tex2html1398"
+<B> Previous:</B> <A NAME="tex2html1418"
+  HREF="node92.html">php_stl::call_string_set</A>
+ &nbsp; <B>  <A NAME="tex2html1426"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000875000000000000000">
-<TT>php_tok</TT></A>
+<TT>php_stl::call_string_string_hash_map</TT></A>
 </H2>
 
 <P>
-This library could be used to tokenize an arbitrary number of PHP files hierarchically for preprocessing in C++, but there is no example usage, active development, or support for it at this time.
+<PRE>
+#include "php_stl.h"
+
+hash_map&lt;string, string&gt; 
+php_stl::call_string_string_hash_map(char *fn, char *argspec = "", ...);
+</PRE>
 
 <P>
+<I>Description:</I> Call the PHP function <code>fn</code> with the arguments described by <code>argspec</code> and included as subsequent arguments. If <code>argspec</code> is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key or value in the returned array to a <code>string</code> it may generate a type mismatch warning if those warnings are enabled.
 
-<BR><HR>
+<P>
+<I>Errors:</I> It is an error for the number of arguments described in <code>argspec</code> to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in <code>argspec</code>(see Table 1 on page&nbsp;<A HREF="node9.html#Table1"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/local/share/lib/latex2html/icons/crossref.png"></A> for details). If the value returned by PHP is not an array <code>call_string_string_hash_map</code> will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the <code>status</code> flag (see <code>php::status</code>) being set to a nonzero value.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1427"
+  HREF="node94.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1423"
+  HREF="node18.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1417"
+  HREF="node92.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1425"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1428"
+  HREF="node94.html">php_stl::call_string_string_map</A>
+<B> Up:</B> <A NAME="tex2html1424"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html1418"
+  HREF="node92.html">php_stl::call_string_set</A>
+ &nbsp; <B>  <A NAME="tex2html1426"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Andrew Bosworth
-2007-02-08
+2007-02-27
 </ADDRESS>
 </BODY>
 </HTML>

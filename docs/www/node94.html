@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>License and Copyright</TITLE>
-<META NAME="description" CONTENT="License and Copyright">
+<TITLE>php_stl::call_string_string_map</TITLE>
+<META NAME="description" CONTENT="php_stl::call_string_string_map">
 <META NAME="keywords" CONTENT="phpembed">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -19,107 +19,93 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <LINK REL="STYLESHEET" HREF="phpembed.css">
 
 <LINK REL="next" HREF="node95.html">
-<LINK REL="previous" HREF="node18.html">
-<LINK REL="up" HREF="phpembed.html">
+<LINK REL="previous" HREF="node93.html">
+<LINK REL="up" HREF="node18.html">
 <LINK REL="next" HREF="node95.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1411"
+<A NAME="tex2html1439"
   HREF="node95.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
-<A NAME="tex2html1407"
-  HREF="phpembed.html">
+<A NAME="tex2html1435"
+  HREF="node18.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html1401"
+<A NAME="tex2html1429"
   HREF="node93.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
-<A NAME="tex2html1409"
+<A NAME="tex2html1437"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1412"
-  HREF="node95.html">Contact</A>
-<B> Up:</B> <A NAME="tex2html1408"
-  HREF="phpembed.html">PHPEmbed</A>
-<B> Previous:</B> <A NAME="tex2html1402"
-  HREF="node93.html">php_tok</A>
- &nbsp; <B>  <A NAME="tex2html1410"
+<B> Next:</B> <A NAME="tex2html1440"
+  HREF="node95.html">php_stl::call_string_uint_hash_map</A>
+<B> Up:</B> <A NAME="tex2html1436"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html1430"
+  HREF="node93.html">php_stl::call_string_string_hash_map</A>
+ &nbsp; <B>  <A NAME="tex2html1438"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION00090000000000000000">
-License and Copyright</A>
-</H1>
+<H2><A NAME="SECTION000876000000000000000">
+<TT>php_stl::call_string_string_map</TT></A>
+</H2>
 
 <P>
-Copyright &#169; 2007, <A NAME="tex2html9"
-  HREF="http://www.facebook.com/p/Andrew_Boz_Bosworth/1681">Andrew Bosworth</A>, <A NAME="tex2html10"
-  HREF="http://www.facebook.com/p/Brian_Shire/10039877">Brian Shire</A>, <A NAME="tex2html11"
-  HREF="http://www.facebook.com">Facebook, inc.</A>
+<PRE>
+#include "php_stl.h"
 
-<BR>
-All rights reserved.
-
-<BR>
-<P>
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+map&lt;string, string&gt; 
+php_stl::call_string_string_map(char *fn, char *argspec = "", ...);
+</PRE>
 
 <P>
-
-<UL>
-<LI>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-</LI>
-<LI>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-</LI>
-<LI>Neither the name of Facebook, inc. nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+<I>Description:</I> Call the PHP function <code>fn</code> with the arguments described by <code>argspec</code> and included as subsequent arguments. If <code>argspec</code> is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL map as such. Each time PHP type conversion is necessary to convert a key or value in the returned array to a <code>string</code> it may generate a type mismatch warning if those warnings are enabled.
 
 <P>
-</LI>
-</UL>
-
-<P>
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<I>Errors:</I> It is an error for the number of arguments described in <code>argspec</code> to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in <code>argspec</code>(see Table 1 on page&nbsp;<A HREF="node9.html#Table1"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/local/share/lib/latex2html/icons/crossref.png"></A> for details). If the value returned by PHP is not an array <code>call_string_string_map</code> will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the <code>status</code> flag (see <code>php::status</code>) being set to a nonzero value.
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html1411"
+<A NAME="tex2html1439"
   HREF="node95.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
-<A NAME="tex2html1407"
-  HREF="phpembed.html">
+<A NAME="tex2html1435"
+  HREF="node18.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html1401"
+<A NAME="tex2html1429"
   HREF="node93.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
-<A NAME="tex2html1409"
+<A NAME="tex2html1437"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1412"
-  HREF="node95.html">Contact</A>
-<B> Up:</B> <A NAME="tex2html1408"
-  HREF="phpembed.html">PHPEmbed</A>
-<B> Previous:</B> <A NAME="tex2html1402"
-  HREF="node93.html">php_tok</A>
- &nbsp; <B>  <A NAME="tex2html1410"
+<B> Next:</B> <A NAME="tex2html1440"
+  HREF="node95.html">php_stl::call_string_uint_hash_map</A>
+<B> Up:</B> <A NAME="tex2html1436"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html1430"
+  HREF="node93.html">php_stl::call_string_string_hash_map</A>
+ &nbsp; <B>  <A NAME="tex2html1438"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Andrew Bosworth
-2007-02-08
+2007-02-27
 </ADDRESS>
 </BODY>
 </HTML>

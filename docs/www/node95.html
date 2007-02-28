@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Contact</TITLE>
-<META NAME="description" CONTENT="Contact">
+<TITLE>php_stl::call_string_uint_hash_map</TITLE>
+<META NAME="description" CONTENT="php_stl::call_string_uint_hash_map">
 <META NAME="keywords" CONTENT="phpembed">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -20,54 +20,92 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node96.html">
 <LINK REL="previous" HREF="node94.html">
-<LINK REL="up" HREF="phpembed.html">
+<LINK REL="up" HREF="node18.html">
 <LINK REL="next" HREF="node96.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1423"
+<A NAME="tex2html1451"
   HREF="node96.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
-<A NAME="tex2html1419"
-  HREF="phpembed.html">
+<A NAME="tex2html1447"
+  HREF="node18.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html1413"
+<A NAME="tex2html1441"
   HREF="node94.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
-<A NAME="tex2html1421"
+<A NAME="tex2html1449"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1424"
-  HREF="node96.html">About this document ...</A>
-<B> Up:</B> <A NAME="tex2html1420"
-  HREF="phpembed.html">PHPEmbed</A>
-<B> Previous:</B> <A NAME="tex2html1414"
-  HREF="node94.html">License and Copyright</A>
- &nbsp; <B>  <A NAME="tex2html1422"
+<B> Next:</B> <A NAME="tex2html1452"
+  HREF="node96.html">php_stl::call_string_uint_map</A>
+<B> Up:</B> <A NAME="tex2html1448"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html1442"
+  HREF="node94.html">php_stl::call_string_string_map</A>
+ &nbsp; <B>  <A NAME="tex2html1450"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION000100000000000000000">
-Contact</A>
-</H1>
+<H2><A NAME="SECTION000877000000000000000">
+<TT>php_stl::call_string_uint_hash_map</TT></A>
+</H2>
 
 <P>
-Post feedback, patches, or bug reports to the discussion board at 
-<BR><A NAME="tex2html12"
-  HREF="http://www.phpembed.org/bboard/">http://www.phpembed.org/bboard/</A>
+<PRE>
+#include "php_stl.h"
+
+hash_map&lt;string, unsigned int&gt;
+php_stl::call_string_uint_hash_map(char *fn, char *argspec = "", ...);
+</PRE>
+
 <P>
-<BR><HR>
+<I>Description:</I> Call the PHP function <code>fn</code> with the arguments described by <code>argspec</code> and included as subsequent arguments. If <code>argspec</code> is not specified the function will be called without any arguments. The type of the value returned from PHP must be an array and each key-value pair in that array will be inserted into an STL hash map as such. Each time PHP type conversion is necessary to convert a key in the array to a <code>string</code> or a value in the array to an <code>unsigned int</code> it may generate a type mismatch warning if those warnings are enabled. <I>NOTE:</I> Since all numeric values in PHP are of type <code>long</code>, this function simply typecasts each value from <code>long</code> to <code>unsigned int</code> in C++.
+
+<P>
+<I>Errors:</I> It is an error for the number of arguments described in <code>argspec</code> to differ from the number of arguments provided thereafter. It is an error for the types of additional arguments to differ from their description in <code>argspec</code>(see Table 1 on page&nbsp;<A HREF="node9.html#Table1"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/local/share/lib/latex2html/icons/crossref.png"></A> for details). If the value returned by PHP is not an array <code>call_string_uint_hash_map</code> will output a type mismatch error (regardless of whether type warnings are on or not) and return an empty map. Any internal errors during execution will result in the <code>status</code> flag (see <code>php::status</code>) being set to a nonzero value.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1451"
+  HREF="node96.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html1447"
+  HREF="node18.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html1441"
+  HREF="node94.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html1449"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1452"
+  HREF="node96.html">php_stl::call_string_uint_map</A>
+<B> Up:</B> <A NAME="tex2html1448"
+  HREF="node18.html">Function Reference</A>
+<B> Previous:</B> <A NAME="tex2html1442"
+  HREF="node94.html">php_stl::call_string_string_map</A>
+ &nbsp; <B>  <A NAME="tex2html1450"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Andrew Bosworth
-2007-02-08
+2007-02-27
 </ADDRESS>
 </BODY>
 </HTML>

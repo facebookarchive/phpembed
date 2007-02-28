@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>php_iterator::get_data_array</TITLE>
-<META NAME="description" CONTENT="php_iterator::get_data_array">
+<TITLE>php_iterator::get_data_type</TITLE>
+<META NAME="description" CONTENT="php_iterator::get_data_type">
 <META NAME="keywords" CONTENT="phpembed">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -26,49 +26,49 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html885"
+<A NAME="tex2html911"
   HREF="node51.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
-<A NAME="tex2html881"
+<A NAME="tex2html907"
   HREF="node18.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html875"
+<A NAME="tex2html901"
   HREF="node49.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
-<A NAME="tex2html883"
+<A NAME="tex2html909"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html886"
-  HREF="node51.html">php_iterator::get_key_type</A>
-<B> Up:</B> <A NAME="tex2html882"
+<B> Next:</B> <A NAME="tex2html912"
+  HREF="node51.html">php_iterator::get_key_c_string</A>
+<B> Up:</B> <A NAME="tex2html908"
   HREF="node18.html">Function Reference</A>
-<B> Previous:</B> <A NAME="tex2html876"
-  HREF="node49.html">php_iterator::get_data_bool</A>
- &nbsp; <B>  <A NAME="tex2html884"
+<B> Previous:</B> <A NAME="tex2html902"
+  HREF="node49.html">php_iterator::get_data_long</A>
+ &nbsp; <B>  <A NAME="tex2html910"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000832000000000000000">
-<TT>php_iterator::get_data_array</TT></A>
+<TT>php_iterator::get_data_type</TT></A>
 </H2>
 
 <P>
 <PRE>
 #include "php_arr.h"
 
-php_array 
-php_iterator::get_data_array();
+php_type 
+php_iterator::get_data_type();
 </PRE>
 
 <P>
-<I>Description:</I> Return the value of the element at the current iterator position as a <code>php_array</code>. This function can be used in conjunction with an additional iterator to navigate nested arrays. If the value at the current iterator position isn't of type <code>IS_ARRAY</code> then this function will return a new <code>php_array</code> with a single element whose key is 0 and whose value is the same value and type of the data at the current iterator position and may generate a type mismatch warning if those warnings are enabled. 
+<I>Description:</I> Returns the data type of the value at the current position of the iterator. See <code>php_ret</code> for the list of types.
 
 <P>
 <I>Errors:</I> It is an error to call this function on an iterator in an invalid position (see <code>php_iterator::done</code>).
@@ -77,7 +77,7 @@ php_iterator::get_data_array();
 <BR><HR>
 <ADDRESS>
 Andrew Bosworth
-2007-02-08
+2007-02-27
 </ADDRESS>
 </BODY>
 </HTML>

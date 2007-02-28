@@ -1,4 +1,9 @@
 No implementation found for style `ifpdf'
 No implementation found for style `hyperref'
 
-Substitution of arg to newlabelxx delayed.
+The phpembed.aux file was not found, so sections will not be numbered 
+and cross-references will be shown as icons.
+
+No number for "PHPEmbedargumentspecifiers"
+
+No number for "<TT>php_type</TT>values"
