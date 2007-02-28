@@ -58,8 +58,11 @@ public:
   set<int> call_int_set(char *fn, char *argspec =  "", ...);
   set<unsigned int> call_uint_set(char *fn, char *argspec =  "", ...);
 
-  // this really only makes sense for strings
+  // a hash set of bools also makes no sense
   hash_set<string> call_string_hash_set(char *fn, char *argspec =  "", ...);
+  hash_set<long> call_long_hash_set(char *fn, char *argspec =  "", ...);
+  hash_set<int> call_int_hash_set(char *fn, char *argspec =  "", ...);
+  hash_set<unsigned int> call_uint_hash_set(char *fn, char *argspec =  "", ...);
 
   // NOTE ON NESTED ARRAYS: These maps only support flat associative arrays
   // for nested arrays you'll need to use the php_arr class!
@@ -78,13 +81,18 @@ public:
   map<long, int> call_long_int_map(char *fn, char *argspec =  "", ...);
   map<long, unsigned int> call_long_uint_map(char *fn, char *argspec =  "", ...);
 
-  // hash maps only make sense for string types
   hash_map<string, string> call_string_string_hash_map(char *fn, char *argspec = "", ...);
   hash_map<string, double> call_string_double_hash_map(char *fn, char *argspec = "", ...);
   hash_map<string, long> call_string_long_hash_map(char *fn, char *argspec = "", ...);
   hash_map<string, bool> call_string_bool_hash_map(char *fn, char *argspec = "", ...);
   hash_map<string, int> call_string_int_hash_map(char *fn, char *argspec = "", ...);
   hash_map<string, unsigned int> call_string_uint_hash_map(char *fn, char *argspec = "", ...);
+  hash_map<long, string> call_long_string_hash_map(char *fn, char *argspec = "", ...);
+  hash_map<long, double> call_long_double_hash_map(char *fn, char *argspec = "", ...);
+  hash_map<long, long> call_long_long_hash_map(char *fn, char *argspec = "", ...);
+  hash_map<long, bool> call_long_bool_hash_map(char *fn, char *argspec = "", ...);
+  hash_map<long, int> call_long_int_hash_map(char *fn, char *argspec = "", ...);
+  hash_map<long, unsigned int> call_long_uint_hash_map(char *fn, char *argspec = "", ...);
 };
 
 #endif
