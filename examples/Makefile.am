@@ -15,9 +15,11 @@ INCLUDES += -I/usr/local/php/include/php/sapi/embed
 AM_LDFLAGS = @PHPCONFIGLDFLAGS@ -L/usr/local/php/lib
 
 # List of libraries to link with.
-LDADD = @PHPCONFIGLIBS@ $(top_builddir)/src/libphpembed.a -lphp5
-
+LDADD = @PHPCONFIGLIBS@ $(top_builddir)/src/libphpembed.la -lphp5
 
 bin_PROGRAMS = test usage
 test_SOURCES = test.cpp
 usage_SOURCES = usage.cpp
+
+# old style without libtools
+#LDADD = @PHPCONFIGLIBS@ $(top_builddir)/src/libphpembed.a -lphp5

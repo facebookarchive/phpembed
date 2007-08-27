@@ -6,13 +6,10 @@ SUBDIRS = src examples
 EXTRA_DIST = phpembedVersion.h
 
 # Update config if configure.ac or aclocal.m4 changes
-
 #$(srcdir)/configure: configure.ac aclocal.m4
 #	(cd $(srcdir);autoconf)
-
 #Makefile: Makefile.in config.status
 #	./config.status
-     
 #config.status: configure
 #	./config.status --recheck
 
@@ -21,7 +18,6 @@ EXTRA_DIST = phpembedVersion.h
 # To add to configure.ac
 #AC_SUBST(LIBTOOL_DEPS)
 
-# LIBTOOL_DEPS = @LIBTOOL_DEPS@
+#LIBTOOL_DEPS = @LIBTOOL_DEPS@
 #libtool: $(LIBTOOL_DEPS)
-#       $(SHELL) ./config.status --recheck
-
+#	$(SHELL) ./config.status --recheck

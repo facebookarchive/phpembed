@@ -17,12 +17,13 @@ AC_PROG_CXX
 AC_PROG_RANLIB(RANLIB, ranlib)
 
 ############################################################
-# Turns off shared lib creation. Use  --enable-shared=pkg1,pkg2
+# AC_DISABLE_SHARED Turns off shared lib creation. Use  --enable-shared=pkg1,pkg2
 # This implies all libs are built static except pkg1, pkg2
 # --enable-static=pkg3,pkg4 . Implies shared is enabled except for pkg3 and pkg4
-# When developing a package use --disable-shared OR AC_DISABLE_SHARED macro.
 
-AC_DISABLE_SHARED
+# When developing a package use --disable-shared OR AC_DISABLE_SHARED macro.
+# Current Default shared
+#AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
 
 ##############################################################
@@ -39,9 +40,8 @@ AC_PATH_PROGS(ANT, ant)
 
 # Checks for header files.
 #AC_INCLUDES_DEFAULT
-#AC_HEADER_STDC
-#AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stdint.h stdlib.h string.h sys/param.h sys/socket.h sys/time.h unistd.h])
-
+AC_HEADER_STDC
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stdint.h stdlib.h string.h sys/param.h sys/socket.h sys/time.h unistd.h])
 AC_HEADER_STDBOOL
 AC_HEADER_TIME
 
@@ -49,7 +49,6 @@ AC_HEADER_TIME
 AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
 AC_C_VOLATILE
 
 # Checks for library functions.
@@ -215,10 +214,8 @@ echo "CFLAGS = $CFLAGS"
 echo "CXXFLAGS = $CXXFLAGS"
 echo "CPPFLAGS = $CPPFLAGS"
 echo "DEFS = $DEFS"
-echo "cache_file = $cache_file"
 echo "CC  = $CC"
 echo "CXX = $CXX"
 echo "VERSION = $VERSION"
 echo "PHPEMBED_VERSION_NUMBER= ${PHPEMBED_MAJOR_VERSION}"
 echo "PHPEMBED_VERSION_NUMBER= ${PHPEMBED_VERSION_NUMBER}"
-echo "INCLUDES= ${INCLUDES}"
