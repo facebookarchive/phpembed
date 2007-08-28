@@ -57,21 +57,65 @@ AC_FUNC_STAT
 AC_FUNC_STRTOD
 AC_CHECK_FUNCS([gethostname gettimeofday memset socket strchr strerror strstr strtoul strtoull])
 
-# Check for programs
-AC_CHECK_PROG([PHPCONFIG],[php-config],[yes],[],[],[reject])
+# Path to php-config program
+AC_ARG_WITH(php-config,
+    [ --with-php-config=PATH  Path to php-config tool.],
+    [PHPCONFIG="$withval"],
+    [AC_PATH_PROGS(PHPCONFIG, php-config, , $PATH)]
+)
 if test -z "${PHPCONFIG}"; then
-   AC_ERROR([php-config not found.])
+   AC_MSG_ERROR([Program php-config not found. Required for further procecssing. Use --with-php-config=path to specify absolute path.])
 fi
 
+# Verify if program exists
+#AC_PATH_PROGS(TESTPHPCONFIG, [${PHPCONFIG}], , ${PATH})
+#if test -z "${TESTPHPCONFIG}"; then
+#   AC_MSG_ERROR([Cannot find program $PHPCONFIG. Check PATH variable or path entered.])
+#fi
+AC_SUBST(PHPCONFIG)
 
-PHPCONFIGINCLUDES=`php-config --includes`
-PHPCONFIGLDFLAGS=`php-config --ldflags`
-PHPCONFIGLIBS=`php-config --libs`
-
+# List of php-config include paths
+AC_ARG_WITH(php-includes,
+    [ --with-php-includes=PATHS  php-config include locations.],
+    [PHPCONFIGINCLUDES="$withval"],
+    [PHPCONFIGINCLUDES=""]
+)
+if test -z "${PHPCONFIGINCLUDES}"; then
+   PHPCONFIGINCLUDES=`$PHPCONFIG --includes`
+fi
 AC_SUBST(PHPCONFIGINCLUDES)
-AC_SUBST(PHPCONFIGLDFLAGS)
-AC_SUBST(PHPCONFIGLIBS)
 
+# checking some basic php-config  headers
+save_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS ${PHPCONFIGINCLUDES}"
+headerstocheck="php_config.h php_version.h zend.h zend_API.h php.h php_ini.h ext/standard/info.h"
+for file in ${headerstocheck}
+do
+    AC_PREPROC_IFELSE([$file], [AC_MSG_RESULT([${file} - ok])], AC_MSG_ERROR([Cannot find $file.]))
+done
+CPPFLAGS=$save_CPPFLAGS
+
+# List of php-config ldflags
+AC_ARG_WITH(php-ldflags,
+    [ --with-php-ldflags=LDFLAGS  php-config ldflags list.],
+    [PHPCONFIGLDFLAGS="$withval"],
+    [PHPCONFIGLDFLAGS=""]
+)
+if test -z "${PHPCONFIGLDFLAGS}"; then
+   PHPCONFIGLDFLAGS=`$PHPCONFIG --ldflags`
+fi
+AC_SUBST(PHPCONFIGLDFLAGS)
+
+# List of php-config include paths
+AC_ARG_WITH(php-libs,
+    [ --with-php-libs=LIBS  php-config lib locations.],
+    [PHPCONFIGLIBS="$withval"],
+    [PHPCONFIGLIBS=""]
+)
+if test -z "${PHPCONFIGLIBS}"; then
+   PHPCONFIGLIBS=`$PHPCONFIG --libs`
+fi
+AC_SUBST(PHPCONFIGLIBS)
 
 AC_MSG_CHECKING(whether to use ccache)
 AC_ARG_WITH(ccache,
@@ -188,6 +232,7 @@ AC_ARG_ENABLE(debug,
     ]
 )
 AC_MSG_RESULT($enable_debug)
+
 
 # phpembed versioning
 PHPEMBED_MAJOR_VERSION=`echo $VERSION | cut -f1 -d.`
