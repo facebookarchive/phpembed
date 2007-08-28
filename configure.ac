@@ -2,7 +2,7 @@
 # $Id$
 
 AC_PREREQ(2.52)
-AC_INIT(phpembed, 1.0.0, mvaradachari@facebook.com)
+AC_INIT(phpembed, 1.0.0, boz@facebook.com)
 
 AC_CANONICAL_SYSTEM
 AC_CONFIG_SRCDIR(phpembedVersion.h.in)
