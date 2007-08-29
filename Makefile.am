@@ -3,7 +3,7 @@
 
 SUBDIRS = src examples
 
-EXTRA_DIST = phpembedVersion.h
+EXTRA_DIST = phpembedVersion.h setup
 
 # Update config if configure.ac or aclocal.m4 changes
 #$(srcdir)/configure: configure.ac aclocal.m4
