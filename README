@@ -1,0 +1,55 @@
+PHPEMBED (Simplified API built on top of PHP SAPI)
+
+Andrew Bosworth (boz@facebook.com)
+Brian Shire (shire@facebook.com)
+
+Last Modified: 2007-Sep-23
+
+Phpembed is distributed under the Phpembed open source software license.
+Please see the included LICENSE file.
+
+For more information on phpmbed usage see documentation in ./docs
+
+Installing phpembed
+==============================
+
+Pre-Requisites:
+================================
+
+php 5.x must be installed with --enable-embed option turned on.
+[ To enable building of embedded SAPI library ]
+
+
+Building phpembed library:
+=======================================
+      NOTE: The phpembed library is just a more accessible and simplified library built on top of
+      of the PHP SAPI.
+
+If you are building from the first time out of the source repository, you will
+need to generate the configure scripts.  From the top directory, do:
+
+        ./bootstrap.sh
+
+Once the configure scripts are generated, phpembed can be configured.
+From the top directory, do:
+
+        ./configure  [ default shared mode]
+
+Run ./configure --help to see other configuration options
+
+Make phpembed:
+
+        make
+
+Install phpembed as superuser:
+
+        make install
+
+Note: To run bootstrap you may need the following:
+
+        automake / aclocal -- 1.9.5
+        autoconf -- 2.59
+        autoheader -- 2.59
+        libtool -- 1.5.16
+
+

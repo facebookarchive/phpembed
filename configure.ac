@@ -2,11 +2,11 @@
 # $Id$
 
 AC_PREREQ(2.52)
-AC_INIT(phpembed, 1.0.0, boz@facebook.com)
+AC_INIT(phpembed, 4.0.0, boz@facebook.com)
 
 AC_CANONICAL_SYSTEM
 AC_CONFIG_SRCDIR(phpembedVersion.h.in)
-AM_INIT_AUTOMAKE(phpembed, 1.0.0)
+AM_INIT_AUTOMAKE(phpembed, 1.9.5)
 AM_CONFIG_HEADER(config.h)
 
 AC_PREFIX_DEFAULT(`pwd`/install)
@@ -59,19 +59,14 @@ AC_CHECK_FUNCS([gethostname gettimeofday memset socket strchr strerror strstr st
 
 # Path to php-config program
 AC_ARG_WITH(php-config,
-    [ --with-php-config=PATH  Path to php-config tool.],
+    [ --with-php-config=PATH  Path to php-config tool. EX: /<localpath>/php-config],
     [PHPCONFIG="$withval"],
     [AC_PATH_PROGS(PHPCONFIG, php-config, , $PATH)]
 )
 if test -z "${PHPCONFIG}"; then
-   AC_MSG_ERROR([Program php-config not found. Required for further procecssing. Use --with-php-config=path to specify absolute path.])
+   AC_MSG_ERROR([Program php-config not found. Required for further procecssing. Use --with-php-config=path to specify absolute path to the php-config tool.])
 fi
 
-# Verify if program exists
-#AC_PATH_PROGS(TESTPHPCONFIG, [${PHPCONFIG}], , ${PATH})
-#if test -z "${TESTPHPCONFIG}"; then
-#   AC_MSG_ERROR([Cannot find program $PHPCONFIG. Check PATH variable or path entered.])
-#fi
 AC_SUBST(PHPCONFIG)
 
 # List of php-config include paths
@@ -82,6 +77,7 @@ AC_ARG_WITH(php-includes,
 )
 if test -z "${PHPCONFIGINCLUDES}"; then
    PHPCONFIGINCLUDES=`$PHPCONFIG --includes`
+   PHPCONFIGINCLUDES="${PHPCONFIGINCLUDES} -I`$PHPCONFIG --prefix`/include/php/sapi/embed"
 fi
 AC_SUBST(PHPCONFIGINCLUDES)
 
@@ -93,6 +89,12 @@ for file in ${headerstocheck}
 do
     AC_PREPROC_IFELSE([$file], [AC_MSG_RESULT([${file} - ok])], AC_MSG_ERROR([Cannot find $file.]))
 done
+
+# Special check for php_embed.h
+embedheader="php_embed.hh"
+AC_PREPROC_IFELSE([$embedheader], [AC_MSG_RESULT([${embedheader} - ok])], AC_MSG_ERROR([Cannot find ${embedheader}. Check if php was compiled with the --enable-embed option.]))
+
+NEWCPPFLAGS="$CPPFLAGS"
 CPPFLAGS=$save_CPPFLAGS
 
 # List of php-config ldflags
@@ -103,6 +105,7 @@ AC_ARG_WITH(php-ldflags,
 )
 if test -z "${PHPCONFIGLDFLAGS}"; then
    PHPCONFIGLDFLAGS=`$PHPCONFIG --ldflags`
+   PHPCONFIGLDFLAGS="${PHPCONFIGLDFLAGS} -L`$PHPCONFIG --prefix`/lib"
 fi
 AC_SUBST(PHPCONFIGLDFLAGS)
 
@@ -114,6 +117,7 @@ AC_ARG_WITH(php-libs,
 )
 if test -z "${PHPCONFIGLIBS}"; then
    PHPCONFIGLIBS=`$PHPCONFIG --libs`
+   PHPCONFIGLIBS="${PHPCONFIGLIBS} -L`$PHPCONFIG --prefix`/lib"
 fi
 AC_SUBST(PHPCONFIGLIBS)
 
@@ -254,10 +258,13 @@ CXXFLAGS="$CXXFLAGS -Wall"
 AC_CONFIG_FILES(Makefile phpembedVersion.h src/Makefile examples/Makefile)
 AC_OUTPUT
 
-echo " PHPCONFIG -- $PHPCONFIGLD"
+echo "PHPCONFIG -- $PHPCONFIG"
+echo "PHPCONFIGINCLUDES -- $PHPCONFIGINCLUDES"
+echo "PHPCONFIGLDFLAGS -- $PHPCONFIGLDFLAGS"
+echo "PHPCONFIGLIBS -- $PHPCONFIGLIBS"
 echo "CFLAGS = $CFLAGS"
 echo "CXXFLAGS = $CXXFLAGS"
-echo "CPPFLAGS = $CPPFLAGS"
+echo "CPPFLAGS = $NEWCPPFLAGS"
 echo "DEFS = $DEFS"
 echo "CC  = $CC"
 echo "CXX = $CXX"
