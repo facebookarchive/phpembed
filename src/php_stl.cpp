@@ -6,12 +6,14 @@
 
 string php_stl::call_string(char *fn, char *argspec, ...)
 {
-  zval *rv;
   string rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -40,17 +42,20 @@ string php_stl::call_string(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 vector<string> php_stl::call_string_vector(char *fn, char *argspec, ...)
 {
-  zval *rv;
   vector<string> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -99,17 +104,20 @@ vector<string> php_stl::call_string_vector(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 vector<double> php_stl::call_double_vector(char *fn, char *argspec, ...)
 {
-  zval *rv;
   vector<double> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -158,17 +166,20 @@ vector<double> php_stl::call_double_vector(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 vector<long> php_stl::call_long_vector(char *fn, char *argspec, ...)
 {
-  zval *rv;
   vector<long> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -217,17 +228,20 @@ vector<long> php_stl::call_long_vector(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 vector<bool> php_stl::call_bool_vector(char *fn, char *argspec, ...)
 {
-  zval *rv;
   vector<bool> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -276,18 +290,21 @@ vector<bool> php_stl::call_bool_vector(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to an int!
 vector<int> php_stl::call_int_vector(char *fn, char *argspec, ...)
 {
-  zval *rv;
   vector<int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -336,18 +353,21 @@ vector<int> php_stl::call_int_vector(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to an unsigned int!
 vector<unsigned int> php_stl::call_uint_vector(char *fn, char *argspec, ...)
 {
-  zval *rv;
   vector<unsigned int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -396,17 +416,20 @@ vector<unsigned int> php_stl::call_uint_vector(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 set<string> php_stl::call_string_set(char *fn, char *argspec, ...)
 {
-  zval *rv;
   set<string> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -455,17 +478,20 @@ set<string> php_stl::call_string_set(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 set<double> php_stl::call_double_set(char *fn, char *argspec, ...)
 {
-  zval *rv;
   set<double> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -514,17 +540,20 @@ set<double> php_stl::call_double_set(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 set<long> php_stl::call_long_set(char *fn, char *argspec, ...)
 {
-  zval *rv;
   set<long> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -573,18 +602,21 @@ set<long> php_stl::call_long_set(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to an int!
 set<int> php_stl::call_int_set(char *fn, char *argspec, ...)
 {
-  zval *rv;
   set<int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -633,18 +665,21 @@ set<int> php_stl::call_int_set(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to an unsigned int!
 set<unsigned int> php_stl::call_uint_set(char *fn, char *argspec, ...)
 {
-  zval *rv;
   set<unsigned int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -693,17 +728,20 @@ set<unsigned int> php_stl::call_uint_set(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_set<string> php_stl::call_string_hash_set(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_set<string> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -752,17 +790,20 @@ hash_set<string> php_stl::call_string_hash_set(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_set<long> php_stl::call_long_hash_set(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_set<long> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -811,17 +852,20 @@ hash_set<long> php_stl::call_long_hash_set(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_set<int> php_stl::call_int_hash_set(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_set<int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -870,17 +914,20 @@ hash_set<int> php_stl::call_int_hash_set(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_set<unsigned int> php_stl::call_uint_hash_set(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_set<unsigned int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -929,17 +976,20 @@ hash_set<unsigned int> php_stl::call_uint_hash_set(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 map<string, string> php_stl::call_string_string_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<string, string> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -993,17 +1043,20 @@ map<string, string> php_stl::call_string_string_map(char *fn, char *argspec, ...
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 map<string, double> php_stl::call_string_double_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<string, double> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1057,17 +1110,20 @@ map<string, double> php_stl::call_string_double_map(char *fn, char *argspec, ...
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 map<string, long> php_stl::call_string_long_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<string, long> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1121,17 +1177,20 @@ map<string, long> php_stl::call_string_long_map(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 map<string, bool> php_stl::call_string_bool_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<string, bool> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1185,18 +1244,21 @@ map<string, bool> php_stl::call_string_bool_map(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to and int!
 map<string, int> php_stl::call_string_int_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<string, int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1250,18 +1312,21 @@ map<string, int> php_stl::call_string_int_map(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to an unsigned int!
 map<string, unsigned int> php_stl::call_string_uint_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<string, unsigned int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1315,17 +1380,20 @@ map<string, unsigned int> php_stl::call_string_uint_map(char *fn, char *argspec,
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 map<long, string> php_stl::call_long_string_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<long, string> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1379,17 +1447,20 @@ map<long, string> php_stl::call_long_string_map(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 map<long, double> php_stl::call_long_double_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<long, double> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1443,17 +1514,20 @@ map<long, double> php_stl::call_long_double_map(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 map<long, long> php_stl::call_long_long_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<long, long> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1507,17 +1581,20 @@ map<long, long> php_stl::call_long_long_map(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 map<long, bool> php_stl::call_long_bool_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<long, bool> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1571,18 +1648,21 @@ map<long, bool> php_stl::call_long_bool_map(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to and int!
 map<long, int> php_stl::call_long_int_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<long, int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1636,18 +1716,21 @@ map<long, int> php_stl::call_long_int_map(char *fn, char *argspec, ...)
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to and unsigned int!
 map<long, unsigned int> php_stl::call_long_uint_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   map<long, unsigned int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1701,17 +1784,20 @@ map<long, unsigned int> php_stl::call_long_uint_map(char *fn, char *argspec, ...
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_map<string, string> php_stl::call_string_string_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<string, string> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1765,17 +1851,20 @@ hash_map<string, string> php_stl::call_string_string_hash_map(char *fn, char *ar
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_map<string, double> php_stl::call_string_double_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<string, double> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1829,17 +1918,20 @@ hash_map<string, double> php_stl::call_string_double_hash_map(char *fn, char *ar
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_map<string, long> php_stl::call_string_long_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<string, long> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1893,17 +1985,20 @@ hash_map<string, long> php_stl::call_string_long_hash_map(char *fn, char *argspe
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_map<string, bool> php_stl::call_string_bool_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<string, bool> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -1957,18 +2052,21 @@ hash_map<string, bool> php_stl::call_string_bool_hash_map(char *fn, char *argspe
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to and int!
 hash_map<string, int> php_stl::call_string_int_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<string, int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -2022,18 +2120,21 @@ hash_map<string, int> php_stl::call_string_int_hash_map(char *fn, char *argspec,
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to and unsigned int!
 hash_map<string, unsigned int> php_stl::call_string_uint_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<string, unsigned int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -2087,17 +2188,20 @@ hash_map<string, unsigned int> php_stl::call_string_uint_hash_map(char *fn, char
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_map<long, string> php_stl::call_long_string_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<long, string> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -2151,17 +2255,20 @@ hash_map<long, string> php_stl::call_long_string_hash_map(char *fn, char *argspe
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_map<long, double> php_stl::call_long_double_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<long, double> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -2215,17 +2322,20 @@ hash_map<long, double> php_stl::call_long_double_hash_map(char *fn, char *argspe
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_map<long, long> php_stl::call_long_long_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<long, long> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -2279,17 +2389,20 @@ hash_map<long, long> php_stl::call_long_long_hash_map(char *fn, char *argspec, .
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 hash_map<long, bool> php_stl::call_long_bool_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<long, bool> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -2343,18 +2456,21 @@ hash_map<long, bool> php_stl::call_long_bool_hash_map(char *fn, char *argspec, .
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to and int!
 hash_map<long, int> php_stl::call_long_int_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<long, int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -2408,18 +2524,21 @@ hash_map<long, int> php_stl::call_long_int_hash_map(char *fn, char *argspec, ...
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 
 // NOTE: this just truncates the php long to and unsigned int!
 hash_map<long, unsigned int> php_stl::call_long_uint_hash_map(char *fn, char *argspec, ...)
 {
-  zval *rv;
   hash_map<long, unsigned int> rrv;
+
+  PUSH_CTX();
+  zval *rv;
 
   va_list ap;
   va_start(ap, argspec);
-  rv = call(fn, argspec, ap);
+  rv = call(fn, argspec, ap TSRMLS_CC);
   va_end(ap);
 
   if(rv)
@@ -2473,6 +2592,7 @@ hash_map<long, unsigned int> php_stl::call_long_uint_hash_map(char *fn, char *ar
     zval_ptr_dtor(&rv);
   }
 
+  POP_CTX();
   return rrv;
 }
 

@@ -11,6 +11,17 @@
 #define SUCCESS 0
 #define FAIL 1
 
+#ifdef ZTS
+#define PUSH_CTX() tsrm_mutex_lock(lock); \
+                   void *prev_ctx = tsrm_set_interpreter_context(ctx); \
+                   { TSRMLS_FETCH();
+#define POP_CTX() } tsrm_set_interpreter_context(prev_ctx); \
+                    tsrm_mutex_unlock(lock); 
+#else
+#define PUSH_CTX()
+#define POP_CTX()
+#endif
+
 typedef unsigned int php_ret;
 
 // these function pointers are in a separate class because
@@ -21,11 +32,17 @@ typedef unsigned int php_ret;
 class php_const
 {
 public:
-  php_const() { message_function = error_function = output_function = NULL; }
+  php_const() { 
+    message_function = error_function = output_function = NULL; 
+    initialized = false;
+    clients = 0;
+  }
 
   void (*message_function)(const char *);
   void (*error_function)(const char *);
   void (*output_function)(const char *);
+  bool initialized;
+  int clients;
 };
 
 // This is the global constants variable we define for the reasons listed above
@@ -71,7 +88,9 @@ public:
   // no int or uint versions since the user can just call_long and truncate
 
   // gotta use this if you're going for nested arrays of any kind
-  php_array call_php_array(char *fn, char *argspec = "", ...);
+  //
+  // NOTE: user is responsible for deleting the returned object
+  php_array *call_php_array(char *fn, char *argspec = "", ...);
 
   // same as above except these return an array of the given type
   // and set the size argument to the size of the array
@@ -103,13 +122,21 @@ protected:
 
   // we don't want the user to have to deal with zval returns
   // caller needs to free the zval returned
-  zval *call(char *fn, char *argspec, va_list ap);
+  zval *call(char *fn, char *argspec, va_list ap TSRMLS_DC);
   zval *call(char *fn, char *argspec = "", ...);
 
   // we'll use the same function as error_wrap for this
   static void internal_error(const char *str);
 
   bool type_warnings;
+
+#ifdef ZTS
+  // this is the context in which we evaluate this objects requests
+  void *ctx;
+
+  // a mutex to prevent re-entrance
+  MUTEX_T lock;
+#endif
 
 private:
 
@@ -120,8 +147,11 @@ private:
   // errors are sent to stderr
   static void message_wrap(char *str);
   static void error_wrap(int error, const char *fmt, ...);
-  static int output_wrap(const char *str, unsigned int strlen);
+  static int output_wrap(const char *str, unsigned int strlen TSRMLS_DC);
 
+  // initialize the global PHP instance
+  int init_global_php();
+  
   // simulate an ini file on startup
   int php_set_ini_entry(char *entry, char *value, int stage);
 

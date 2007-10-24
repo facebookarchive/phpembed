@@ -55,14 +55,16 @@ int main(int argc, char **argv){
   printf("\n");
 
   // get a nested array back from php
-  php_array a = p.call_php_array("foo_complex_array");
+  php_array *a = p.call_php_array("foo_complex_array");
 
   // use our function below with iterators and type checking to print it in C
-  print_php_array(a);
+  print_php_array(*a);
   printf("\n");
 
   // now try printing it with PHP, should use our output function from above
-  p.call_void("print_r", "a", &a);
+  p.call_void("print_r", "a", a);
+
+  delete a;
 }
 
 

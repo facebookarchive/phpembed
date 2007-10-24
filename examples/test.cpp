@@ -503,8 +503,8 @@ int main(int argc, char **argv){
 
     printf("testing call_php_array and php_iterator...");
     bool pass = true;
-    php_array e = p.call_php_array("foo_complex_array");
-    php_iterator it(e);
+    php_array *e = p.call_php_array("foo_complex_array");
+    php_iterator it(*e);
     if(!it.done() && it.get_data_type() == IS_ARRAY){
 
       php_array f = it.get_data_array();
@@ -575,6 +575,8 @@ int main(int argc, char **argv){
     } else {
       pass = false;
     }
+
+    delete e;
 
     if(!pass){
       printf("failed!\n");
