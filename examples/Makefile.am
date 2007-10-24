@@ -12,7 +12,8 @@ AM_LDFLAGS = @PHPCONFIGLDFLAGS@
 # List of libraries to link with.
 LDADD = @PHPCONFIGLIBS@ $(top_builddir)/src/libphpembed.la -lphp5
 
-bin_PROGRAMS = test usage
+bin_PROGRAMS = test usage example
 test_SOURCES = test.cpp
 usage_SOURCES = usage.cpp
+example_SOURCES = example.cpp
 

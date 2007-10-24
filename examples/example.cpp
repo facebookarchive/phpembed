@@ -10,7 +10,7 @@ void print_php_array(php_array &a, int depth = 0);
 // define our own output functions with this exact signature
 void print_null(const char *str) {}
 void print_mine(const char *str){
-  printf("My Output: %s", str);
+  printf("%s", str);
 }
 
 int main(int argc, char **argv){
@@ -30,7 +30,9 @@ int main(int argc, char **argv){
 
   // an example of calling into a function with C arguments
   long tre = 3;
-  printf("%s\n", p.call_c_string("trivial_func", "sld", "answer: ", tre, 4.5));
+  char *tres = p.call_c_string("trivial_func", "sld", "answer: ", tre, 4.5);
+  if(tres)
+    printf("%s\n", tres);
   printf("\n");
 
   // this test function returns a string, but we call_long so it converts it

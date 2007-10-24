@@ -6,7 +6,7 @@
 
 // define our own output functions with this exact signature
 void print_null(const char *str) {}
-void print_mine(const char *str){ printf("My Output: %s", str); }
+void print_mine(const char *str){ printf("%s", str); }
 
 int main(int argc, char **argv){
 
@@ -16,12 +16,6 @@ int main(int argc, char **argv){
   // redefine the output functions to do what we want
   p.set_message_function(print_null);
   p.set_output_function(print_mine);
-
-  // Load a php file
-  if(SUCCESS != p.load("usage.php")){
-    printf("load failed\n");
-    exit(1);
-  }
 
   long memused = p.call_long("memory_get_usage"); 
   hash_set<string> ex; 
