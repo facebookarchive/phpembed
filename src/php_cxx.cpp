@@ -959,25 +959,28 @@ php::php(bool _type_warnings)
 
   PUSH_CTX();
 
-  // ADAPTED from php_embed_init
-  php_set_ini_entry("register_argc_argv", "1", PHP_INI_STAGE_ACTIVATE);
-  php_set_ini_entry("html_errors", "0", PHP_INI_STAGE_ACTIVATE);
-  php_set_ini_entry("implicit_flush", "1", PHP_INI_STAGE_ACTIVATE);
-  php_set_ini_entry("max_execution_time", "0", PHP_INI_STAGE_ACTIVATE);
+  /* Set some Embedded PHP defaults */
+  zend_alter_ini_entry("html_errors", 12, "0", 1, PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE);
+  zend_alter_ini_entry("implicit_flush", 15, "1", 1, PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE);
+  zend_alter_ini_entry("max_execution_time", 19, "0", 1, PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE);
+  zend_alter_ini_entry("variables_order", 16, "S", 1, PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE);
 
-  // we don't have get or post or cookie data in an embedded context
-  php_set_ini_entry("variables_order", "S", PHP_INI_STAGE_ACTIVATE);
+  if (php_request_startup(TSRMLS_C)==FAILURE) {
+    internal_error("PHP ERROR: failed initializing php_request\n");
+    status = FAIL;
+  }
 
-  // CLIENTS: you may want to add your own ini modifications here
-
-  // ADAPTED from php_embed_init
   SG(options) |= SAPI_OPTION_NO_CHDIR;
   SG(headers_sent) = 1;
   SG(request_info).no_headers = 1;
 
-  php_request_startup( TSRMLS_C );
+  PG(during_request_startup) = 0;
 
-  PG( during_request_startup) = 0;
+  // as an embedded module, we don't want any PHP timeout!
+  php_set_ini_entry("max_execution_time", "0", PHP_INI_STAGE_ACTIVATE);
+  
+  // we don't have get or post or cookie data in an embedded context
+  php_set_ini_entry("variables_order", "S", PHP_INI_STAGE_ACTIVATE);
 
   POP_CTX();
 }
@@ -1022,7 +1025,7 @@ int php::init_global_php(){
   setmode(_fileno(stdin), O_BINARY);        /* make the stdio mode be binary */
   setmode(_fileno(stdout), O_BINARY);       /* make the stdio mode be binary */
   setmode(_fileno(stderr), O_BINARY);       /* make the stdio mode be binary */
-#endif  
+#endif
 
 #ifdef ZTS
   // PHPE: if they want threads, let's give them more than 1!
@@ -1039,7 +1042,7 @@ int php::init_global_php(){
   if (php_embed_module.startup(&php_embed_module)==FAILURE) {
     return FAILURE;
   }
-  
+
   zend_llist_init(&global_vars, sizeof(char *), NULL, 0);
 
   return SUCCESS;
