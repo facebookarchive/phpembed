@@ -924,7 +924,11 @@ int php::php_set_ini_entry(char *entry, char *value, int stage)
 php::~php()
 {
   PUSH_CTX();
+#ifdef ZTS
   php_request_shutdown(TSRMLS_C);
+#else
+  php_request_shutdown((void *)NULL);
+#endif
   POP_CTX();
 #ifdef ZTS
   tsrm_mutex_free(lock);
