@@ -924,8 +924,7 @@ int php::php_set_ini_entry(char *entry, char *value, int stage)
 php::~php()
 {
   PUSH_CTX();
-  php_request_shutdown((void *) 0);
-  php_module_shutdown(TSRMLS_C);
+  php_request_shutdown(TSRMLS_C);
   POP_CTX();
 #ifdef ZTS
   tsrm_mutex_free(lock);
@@ -934,6 +933,9 @@ php::~php()
   p.clients--;
   if(p.clients == 0 && p.initialized == true){
     p.initialized = false;
+    p.message_function = p.error_function = p.output_function = NULL;
+    TSRMLS_FETCH();
+    php_module_shutdown(TSRMLS_C);
     sapi_shutdown();
 #ifdef ZTS
     tsrm_shutdown();
@@ -959,7 +961,7 @@ php::php(bool _type_warnings)
 
   PUSH_CTX();
 
-  /* Set some Embedded PHP defaults */
+  // Set some Embedded PHP defaults 
   zend_alter_ini_entry("html_errors", 12, "0", 1, PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE);
   zend_alter_ini_entry("implicit_flush", 15, "1", 1, PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE);
   zend_alter_ini_entry("max_execution_time", 19, "0", 1, PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE);
@@ -987,6 +989,12 @@ php::php(bool _type_warnings)
 
 int php::init_global_php(){
 
+  // PHPE: lots of objects will use this one initialized php instance
+  p.clients++;
+  if(p.initialized == true)
+    return SUCCESS;
+  p.initialized = true;
+
   // set up the callbacks
   php_embed_module.sapi_error = error_wrap;
   php_embed_module.log_message = message_wrap;
@@ -1003,12 +1011,6 @@ int php::init_global_php(){
   void ***tsrm_ls;
 #endif
 
-  // PHPE: lots of objects will use this one initialized php instance
-  p.clients++;
-  if(p.initialized == true)
-    return SUCCESS;
-  p.initialized = true;
-
 #ifdef HAVE_SIGNAL_H
 #if defined(SIGPIPE) && defined(SIG_IGN)
     signal(SIGPIPE, SIG_IGN); /* ignore SIGPIPE in standalone mode so
@@ -1021,10 +1023,10 @@ int php::init_global_php(){
 #endif
 
 #ifdef PHP_WIN32
-  _fmode = _O_BINARY;           /*sets default for file streams to binary */
-  setmode(_fileno(stdin), O_BINARY);        /* make the stdio mode be binary */
-  setmode(_fileno(stdout), O_BINARY);       /* make the stdio mode be binary */
-  setmode(_fileno(stderr), O_BINARY);       /* make the stdio mode be binary */
+  _fmode = _O_BINARY;                //sets default for file streams to binary 
+  setmode(_fileno(stdin), O_BINARY);          // make the stdio mode be binary 
+  setmode(_fileno(stdout), O_BINARY);         // make the stdio mode be binary 
+  setmode(_fileno(stderr), O_BINARY);         // make the stdio mode be binary 
 #endif
 
 #ifdef ZTS
