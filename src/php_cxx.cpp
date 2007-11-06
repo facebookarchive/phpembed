@@ -932,19 +932,19 @@ php::~php()
   POP_CTX();
 #ifdef ZTS
   tsrm_mutex_free(lock);
-#endif 
 
   p.clients--;
   if(p.clients == 0 && p.initialized == true){
     p.initialized = false;
+#endif 
     p.message_function = p.error_function = p.output_function = NULL;
     TSRMLS_FETCH();
     php_module_shutdown(TSRMLS_C);
     sapi_shutdown();
 #ifdef ZTS
     tsrm_shutdown();
-#endif
   } 
+#endif
 }
 
 php::php(bool _type_warnings)
@@ -994,10 +994,14 @@ php::php(bool _type_warnings)
 int php::init_global_php(){
 
   // PHPE: lots of objects will use this one initialized php instance
+#ifdef ZTS
+  tsrm_mutex_lock(p.init_lock);
   p.clients++;
   if(p.initialized == true)
     return SUCCESS;
   p.initialized = true;
+  tsrm_mutex_unlock(p.init_lock);
+#endif
 
   // set up the callbacks
   php_embed_module.sapi_error = error_wrap;

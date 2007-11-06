@@ -34,15 +34,27 @@ class php_const
 public:
   php_const() { 
     message_function = error_function = output_function = NULL; 
+#ifdef ZTS
     initialized = false;
     clients = 0;
+    init_lock = tsrm_mutex_alloc();
+#endif
+  }
+
+  ~php_const(){
+#ifdef ZTS
+    tsrm_mutex_free(init_lock);
+#endif
   }
 
   void (*message_function)(const char *);
   void (*error_function)(const char *);
   void (*output_function)(const char *);
+#ifdef ZTS
   bool initialized;
   int clients;
+  MUTEX_T init_lock;
+#endif
 };
 
 // This is the global constants variable we define for the reasons listed above
