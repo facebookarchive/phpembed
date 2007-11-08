@@ -997,10 +997,10 @@ int php::init_global_php(){
 #ifdef ZTS
   tsrm_mutex_lock(p.init_lock);
   p.clients++;
-  if(p.initialized == true)
+  if(p.initialized == true){
+    tsrm_mutex_unlock(p.init_lock);
     return SUCCESS;
-  p.initialized = true;
-  tsrm_mutex_unlock(p.init_lock);
+  }
 #endif
 
   // set up the callbacks
@@ -1054,6 +1054,11 @@ int php::init_global_php(){
   }
 
   zend_llist_init(&global_vars, sizeof(char *), NULL, 0);
+
+#ifdef ZTS
+  p.initialized = true;
+  tsrm_mutex_unlock(p.init_lock);
+#endif
 
   return SUCCESS;
   // END ADAPTED php_embed_init
