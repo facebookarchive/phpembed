@@ -4,6 +4,7 @@
 
 #include "php_cxx.h"
 #include <stdio.h>
+#include <signal.h>
 
 void php::set_message_function(void (*_message_function)(const char *)){
   p.message_function = _message_function;
@@ -984,6 +985,10 @@ php::php(bool _type_warnings)
 
   // as an embedded module, we don't want any PHP timeout!
   php_set_ini_entry("max_execution_time", "0", PHP_INI_STAGE_ACTIVATE);
+  // Terminate any currently running timeout interval-timer
+  zend_unset_timeout(TSRMLS_C);
+  // And remove the signal handler just to make sure
+  signal(SIGPROF, SIG_IGN);
   
   // we don't have get or post or cookie data in an embedded context
   php_set_ini_entry("variables_order", "S", PHP_INI_STAGE_ACTIVATE);
