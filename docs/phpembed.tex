@@ -322,7 +322,10 @@ PHP rarely runs beyond its memory limit in apache because the instance only live
 There are also a few known leaks in the PHP core, using the builtin PHP function \verb|memory_get_usage()| in conjunction with the \verb|memory_limit| ini setting will enable any client of PHPEmbed to predict a memory problem before it affects program operation and handle it as appropriate, for example by destroying the PHP object and recreating it.
 
 \subsection{\emph{Can I have multiple instances of PHPEmbed in one program?}}
-No. Although the SAPI provides thread safe resource management and access we haven't written this library to support it.
+Yes, this version of PHPEmbed can support multiple PHP objects in a single binary if it is compiled with Zend Thread Safety (ZTS) enabled. This is still experimental so there may be bugs, especially around memory usage, but each object operates in its own memory so they can be used concurrently. If the access to the PHP object is relatively sparse it may be worth using a single PHP object and passing it to multiple threads.
+
+\subsection{\emph{Is the PHPEmbed library reentrant?}}
+Yes, this version of PHPEmbed supports reentrance if it is compiled with ZTS support. However, bceause it is simply putting a lock on the interpreter during any operation this will not be particularly useful for applications where there is a lot of concurrent access to the PHP object, in those cases it may be worth using multiple PHP instances.
 
 \subsection{\emph{Will this library work on my platform?}}
 We have only tested this software on 64-bit linux architectures, and there is no guarantee it will even work there. That being said, if you can compile PHP on your machine you should be able to compile and use PHPEmbed.

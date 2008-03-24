@@ -1,0 +1,3 @@
+24 MAR 08: PHPEmbed now supports reentrance on each PHP object and also
+multiple PHP objects. You must compile with --enable-maintainer-zts for this
+functionality to work

@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>php_iterator::size</TITLE>
-<META NAME="description" CONTENT="php_iterator::size">
+<TITLE>Is the PHPEmbed library reentrant?</TITLE>
+<META NAME="description" CONTENT="Is the PHPEmbed library reentrant?">
 <META NAME="keywords" CONTENT="phpembed">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -18,57 +18,47 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="phpembed.css">
 
-<LINK REL="next" HREF="node59.html">
-<LINK REL="previous" HREF="node57.html">
-<LINK REL="up" HREF="node18.html">
-<LINK REL="next" HREF="node59.html">
+<LINK REL="next" HREF="node17.html">
+<LINK REL="previous" HREF="node16.html">
+<LINK REL="up" HREF="node13.html">
+<LINK REL="next" HREF="node17.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1007"
-  HREF="node59.html">
+<A NAME="tex2html421"
+  HREF="node17.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
-<A NAME="tex2html1003"
-  HREF="node18.html">
+<A NAME="tex2html417"
+  HREF="node13.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="file:/usr/local/share/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html997"
-  HREF="node57.html">
+<A NAME="tex2html411"
+  HREF="node16.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="file:/usr/local/share/lib/latex2html/icons/prev.png"></A> 
-<A NAME="tex2html1005"
+<A NAME="tex2html419"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1008"
-  HREF="node59.html">php_ret</A>
-<B> Up:</B> <A NAME="tex2html1004"
-  HREF="node18.html">Function Reference</A>
-<B> Previous:</B> <A NAME="tex2html998"
-  HREF="node57.html">php_iterator::operator++</A>
- &nbsp; <B>  <A NAME="tex2html1006"
+<B> Next:</B> <A NAME="tex2html422"
+  HREF="node17.html">Will this library work</A>
+<B> Up:</B> <A NAME="tex2html418"
+  HREF="node13.html">Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html412"
+  HREF="node16.html">Can I have multiple</A>
+ &nbsp; <B>  <A NAME="tex2html420"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION000840000000000000000">
-<TT>php_iterator::size</TT></A>
+<H2><A NAME="SECTION00073000000000000000">
+<I>Is the PHPEmbed library reentrant?</I></A>
 </H2>
-
-<P>
-<PRE>
-#include "php_arr.h"
-
-int 
-php_iterator::size();
-</PRE>
-
-<P>
-<I>Description:</I> Return the number of elements in the <code>php_array</code> associated with this iterator. 
+Yes, this version of PHPEmbed supports reentrance if it is compiled with ZTS support. However, bceause it is simply putting a lock on the interpreter during any operation this will not be particularly useful for applications where there is a lot of concurrent access to the PHP object, in those cases it may be worth using multiple PHP instances.
 
 <P>
 <BR><HR>

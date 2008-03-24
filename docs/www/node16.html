@@ -18,16 +18,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="phpembed.css">
 
-<LINK REL="next" HREF="node17.html">
+<LINK REL="next" HREF="node162.html">
 <LINK REL="previous" HREF="node15.html">
 <LINK REL="up" HREF="node13.html">
-<LINK REL="next" HREF="node17.html">
+<LINK REL="next" HREF="node162.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
 <A NAME="tex2html421"
-  HREF="node17.html">
+  HREF="node162.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="file:/usr/local/share/lib/latex2html/icons/next.png"></A> 
 <A NAME="tex2html417"
@@ -44,7 +44,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  SRC="file:/usr/local/share/lib/latex2html/icons/contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html422"
-  HREF="node17.html">Will this library work</A>
+  HREF="node162.html">Is the PHPEMbed library</A>
 <B> Up:</B> <A NAME="tex2html418"
   HREF="node13.html">Frequently Asked Questions</A>
 <B> Previous:</B> <A NAME="tex2html412"
@@ -58,13 +58,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <H2><A NAME="SECTION00073000000000000000">
 <I>Can I have multiple instances of PHPEmbed in one program?</I></A>
 </H2>
-No. Although the SAPI provides thread safe resource management and access we haven't written this library to support it.
+Yes, this version of PHPEmbed can support multiple PHP objects in a single binary if it is compiled with Zend Thread Safety (ZTS) enabled. This is still experimental so there may be bugs, especially around memory usage, but each object operates in its own memory so they can be used concurrently. If the access to the PHP object is relatively sparse it may be worth using a single PHP object and passing it to multiple threads.
 
 <P>
 <BR><HR>
 <ADDRESS>
 Andrew Bosworth
-2007-09-24
+2008-03-24
 </ADDRESS>
 </BODY>
 </HTML>

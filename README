@@ -1,9 +1,8 @@
 PHPEMBED (Simplified API built on top of PHP SAPI)
 
 Andrew Bosworth (boz@facebook.com)
-Brian Shire (shire@facebook.com)
 
-Last Modified: 2007-Sep-23
+Last Modified: 2008-Mar-23
 
 Phpembed is distributed under the Phpembed open source software license.
 Please see the included LICENSE file.
@@ -22,8 +21,8 @@ php 5.x must be installed with --enable-embed option turned on.
 
 Building phpembed library:
 =======================================
-      NOTE: The phpembed library is just a more accessible and simplified library built on top of
-      of the PHP SAPI.
+NOTE: The phpembed library is just a more accessible and simplified library 
+built on top of of the PHP SAPI.
 
 If you are building from the first time out of the source repository, you will
 need to generate the configure scripts.  From the top directory, do:
