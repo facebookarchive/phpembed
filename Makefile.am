@@ -3,5 +3,5 @@
 
 SUBDIRS = src examples
 
-EXTRA_DIST = phpembedVersion.h bootstrap.sh docs
+EXTRA_DIST = phpembedVersion.h.in bootstrap.sh docs SConstruct LICENSE
 
