@@ -1,0 +1,19 @@
+
+Checkout phpembed/trunk
++++++++++++++++++++++++
+
+(1) Update configure.ac. Change AM_INIT_AUTOMAKE version number. Commit.
+
+(2) Run "make dist"
+    // creates a "phpembed-x.y.z.tar.gz" file
+
+(3) Extract contents of tar gzip file. Remove all files / dirs except
+    bootstrap.sh  configure.ac  COPYING  docs  examples  LICENSE  Makefile.am  NEWS phpembedVersion.h.in  README  SConstruct  src
+
+(4) Re tar / gzip into a new file named "phpembed-<year><mon><day>.tar.gz
+
+(5) Verify content of tar file. Try a build etc.
+
+(6) Check into svn+ssh://tubbs/svnroot/projects/phpembed
+
+(7) Hand over to Boz / SHire to opensource.
