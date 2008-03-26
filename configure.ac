@@ -6,7 +6,7 @@ AC_INIT(phpembed, 4.0.0, boz@facebook.com)
 
 AC_CANONICAL_SYSTEM
 AC_CONFIG_SRCDIR(phpembedVersion.h.in)
-AM_INIT_AUTOMAKE(phpembed, 1.9.5)
+AM_INIT_AUTOMAKE(phpembed, 2.0.0)
 AM_CONFIG_HEADER(config.h)
 
 AC_PREFIX_DEFAULT(`pwd`/install)
