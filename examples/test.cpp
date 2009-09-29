@@ -1,5 +1,6 @@
 // PHP EMBED test program
 // Copyright (c) 2007 Andrew Bosworth, Facebook, inc
+// Modified by Dmitry Zenovich <dzenovich@gmail.com>
 // All rights reserved
 
 #include "php_stl.h"
@@ -28,9 +29,11 @@ int main(int argc, char **argv){
     bool b = true;
     int i = 5;
     unsigned int u = 6;
+    char *s = "a.\0.\0.a";
+    unsigned int sLen = sizeof("a.\0.\0.a") - 1;
 
     printf("testing passing arguments to php...");
-    if(!p.call_bool("bar", "ldsbii", l, d, c, b, i, u)){
+    if(!p.call_bool("bar", "ldsbiiS", l, d, c, b, i, u, s, sLen)){
       printf("failed!\n");
       failcount++;
     } else {
@@ -85,6 +88,23 @@ int main(int argc, char **argv){
       failcount++;
     } else {
       printf("passed.\n");
+    }
+    if(c){
+      free(c);
+    }
+
+    printf("testing call_c_string_ex...");
+    unsigned int len;
+    char *ce = p.call_c_string_ex("foo_string_ex", &len);
+    if(p.status != SUCCESS || len != sizeof("hello \0world\n")-1 ||
+       memcmp(ce, "hello \0world\n\0", len+1) != 0){
+      printf("failed!\n");
+      failcount++;
+    } else {
+      printf("passed.\n");
+    }
+    if(ce){
+      free(ce);
     }
 
     size_t sla, sba, sda, sca, sia, sua;
@@ -161,7 +181,7 @@ int main(int argc, char **argv){
     printf("testing call_string_vector...");
     vector<string> sv = p.call_string_vector("foo_vector_string");
     if(p.status != SUCCESS || sv.size() != 4 || sv[0] != "two" || 
-       sv[1] != "three" || sv[2] != "four" || sv[3] != "three"){
+       sv[1] != "three" || sv[2] != string("four\0\1", 6) || sv[3] != "three"){
       printf("failed!\n");
       failcount++;
     } else {
@@ -220,7 +240,8 @@ int main(int argc, char **argv){
     printf("testing call_string_hash_set...");
     hash_set<string> shs = p.call_string_hash_set("foo_vector_string");
     if(p.status != SUCCESS || shs.size() != 3 || shs.find("two") == shs.end() ||
-       shs.find("three") == shs.end() || shs.find("four") == shs.end()){
+       shs.find("three") == shs.end() ||
+       shs.find(string("four\0\1", 6)) == shs.end()){
       printf("failed!\n");
       failcount++;
     } else {
@@ -230,7 +251,8 @@ int main(int argc, char **argv){
     printf("testing call_string_string_map...");
     map<string, string> ssm = p.call_string_string_map("foo_assoc_string");
     if(p.status != SUCCESS || ssm.size() != 3 || ssm["two"] != "dos" ||
-       ssm["three"] != "tres" || ssm["four"] != "quatro"){
+       ssm["three"] != "tres" ||
+       ssm[string("four\0\1", 6)] != string("quatro\0\1", 8)){
       printf("failed!\n");
       failcount++;
     } else {
@@ -240,7 +262,8 @@ int main(int argc, char **argv){
     printf("testing call_string_double_map...");
     map<string, double> sdm = p.call_string_double_map("foo_assoc_double");
     if(p.status != SUCCESS || sdm.size() != 4 || sdm["two"] != 2.71 ||
-       sdm["three"] != 3.14 || sdm["four"] != 4.0 || sdm["five"] != 3.14){
+       sdm["three"] != 3.14 || sdm[string("four\0\1", 6)] != 4.0 ||
+       sdm["five"] != 3.14){
       printf("failed!\n");
       failcount++;
     } else {
@@ -250,7 +273,8 @@ int main(int argc, char **argv){
     printf("testing call_string_long_map...");
     map<string, long> slm = p.call_string_long_map("foo_assoc_long");
     if(p.status != SUCCESS || slm.size() != 4 || slm["two"] != 2 ||
-       slm["three"] != 3 || slm["four"] != 4 || slm["five"] != 3){
+       slm["three"] != 3 || slm[string("four\0\1", 6)] != 4 ||
+       slm["five"] != 3){
       printf("failed!\n");
       failcount++;
     } else {
@@ -260,7 +284,7 @@ int main(int argc, char **argv){
     printf("testing call_string_bool_map...");
     map<string, bool> sbm = p.call_string_bool_map("foo_assoc_bool");
     if(p.status != SUCCESS || sbm.size() != 3 || !sbm["two"] || 
-       sbm["three"] || !sbm["four"]){
+       sbm["three"] || !sbm[string("four\0\1", 6)]){
       printf("failed!\n");
       failcount++;
     } else {
@@ -270,7 +294,8 @@ int main(int argc, char **argv){
     printf("testing call_string_int_map...");
     map<string, int> sim = p.call_string_int_map("foo_assoc_long");
     if(p.status != SUCCESS || sim.size() != 4 || sim["two"] != 2 ||
-       sim["three"] != 3 || sim["four"] != 4 || sim["five"] != 3){
+       sim["three"] != 3 || sim[string("four\0\1", 6)] != 4 ||
+       sim["five"] != 3){
       printf("failed!\n");
       failcount++;
     } else {
@@ -280,7 +305,8 @@ int main(int argc, char **argv){
     printf("testing call_string_uint_map...");
     map<string, unsigned int> sum = p.call_string_uint_map("foo_assoc_long");
     if(p.status != SUCCESS || sum.size() != 4 || sum["two"] != 2 ||
-       sum["three"] != 3 || sum["four"] != 4 || sum["five"] != 3){
+       sum["three"] != 3 || sum[string("four\0\1", 6)] != 4 ||
+       sum["five"] != 3){
       printf("failed!\n");
       failcount++;
     } else {
@@ -290,7 +316,8 @@ int main(int argc, char **argv){
     printf("testing call_long_string_map...");
     map<long, string> lsm = p.call_long_string_map("foo_index_string");
     if(p.status != SUCCESS || lsm.size() != 4 || lsm[2] != "two" ||
-       lsm[3] != "three" || lsm[4] != "four" || lsm[5] != "three"){
+       lsm[3] != "three" || lsm[4] != string("four\0\1", 6) ||
+       lsm[5] != "three"){
       printf("failed!\n");
       failcount++;
     } else {
@@ -347,9 +374,11 @@ int main(int argc, char **argv){
     }
 
     printf("testing call_string_string_hash_map...");
-    hash_map<string, string> sshm = p.call_string_string_hash_map("foo_assoc_string");
+    hash_map<string, string> sshm =
+       p.call_string_string_hash_map("foo_assoc_string");
     if(p.status != SUCCESS || sshm.size() != 3 || sshm["two"] != "dos" ||
-       sshm["three"] != "tres" || sshm["four"] != "quatro"){
+       sshm["three"] != "tres" ||
+       sshm[string("four\0\1", 6)] != string("quatro\0\1", 8)){
       printf("failed!\n");
       failcount++;
     } else {
@@ -357,9 +386,11 @@ int main(int argc, char **argv){
     }
 
     printf("testing call_string_double_hash_map...");
-    hash_map<string, double> sdhm = p.call_string_double_hash_map("foo_assoc_double");
+    hash_map<string, double> sdhm =
+        p.call_string_double_hash_map("foo_assoc_double");
     if(p.status != SUCCESS || sdhm.size() != 4 || sdhm["two"] != 2.71 ||
-       sdhm["three"] != 3.14 || sdhm["four"] != 4.0 || sdhm["five"] != 3.14){
+       sdhm["three"] != 3.14 || sdhm[string("four\0\1", 6)] != 4.0 ||
+       sdhm["five"] != 3.14){
       printf("failed!\n");
       failcount++;
     } else {
@@ -369,7 +400,8 @@ int main(int argc, char **argv){
     printf("testing call_string_long_hash_map...");
     hash_map<string, long> slhm = p.call_string_long_hash_map("foo_assoc_long");
     if(p.status != SUCCESS || slhm.size() != 4 || slhm["two"] != 2 ||
-       slhm["three"] != 3 || slhm["four"] != 4 || slhm["five"] != 3){
+       slhm["three"] != 3 || slhm[string("four\0\1", 6)] != 4 ||
+       slhm["five"] != 3){
       printf("failed!\n");
       failcount++;
     } else {
@@ -379,7 +411,7 @@ int main(int argc, char **argv){
     printf("testing call_string_bool_hash_map...");
     hash_map<string, bool> sbhm = p.call_string_bool_hash_map("foo_assoc_bool");
     if(p.status != SUCCESS || sbhm.size() != 3 || !sbhm["two"] || 
-       sbhm["three"] || !sbhm["four"]){
+       sbhm["three"] || !sbhm[string("four\0\1", 6)]){
       printf("failed!\n");
       failcount++;
     } else {
@@ -389,7 +421,8 @@ int main(int argc, char **argv){
     printf("testing call_string_int_hash_map...");
     hash_map<string, int> sihm = p.call_string_int_hash_map("foo_assoc_long");
     if(p.status != SUCCESS || sihm.size() != 4 || sihm["two"] != 2 ||
-       sihm["three"] != 3 || sihm["four"] != 4 || sihm["five"] != 3){
+       sihm["three"] != 3 || sihm[string("four\0\1", 6)] != 4 ||
+       sihm["five"] != 3){
       printf("failed!\n");
       failcount++;
     } else {
@@ -397,9 +430,11 @@ int main(int argc, char **argv){
     }
 
     printf("testing call_string_uint_hash_map...");
-    hash_map<string, unsigned int> suhm = p.call_string_uint_hash_map("foo_assoc_long");
+    hash_map<string, unsigned int> suhm =
+        p.call_string_uint_hash_map("foo_assoc_long");
     if(p.status != SUCCESS || suhm.size() != 4 || suhm["two"] != 2 ||
-       suhm["three"] != 3 || suhm["four"] != 4 || suhm["five"] != 3){
+       suhm["three"] != 3 || suhm[string("four\0\1", 6)] != 4 ||
+       suhm["five"] != 3){
       printf("failed!\n");
       failcount++;
     } else {
@@ -410,6 +445,9 @@ int main(int argc, char **argv){
     free(la);
     free(ba);
     free(da);
+    for(unsigned int i=0; i<sca; i++) {
+      free(ca[i]);
+    }
     free(ca);
     free(ia);
     free(ua);
@@ -424,7 +462,7 @@ int main(int argc, char **argv){
     // test associative array creation
     printf("testing php_array add_assoc...");
     php_array a;
-    a.add_assoc("slss", "a", 1, "bee", "two");
+    a.add_assoc("slsSSl", "a", 1l, "bee", "tw\0\1", 4, "cee\0\1", 5, 3l);
     if(!p.call_bool("verify_assoc", "a", &a)){
       printf("failed!\n");
       failcount++;
@@ -435,7 +473,7 @@ int main(int argc, char **argv){
     // test indexed array creation and mixed arrays
     printf("testing php_array add_index...");
     php_array b;
-    b.add_index("lsld", 5, "one", 10, 2.71);
+    b.add_index("lslSld", 5, "one", 2, "abc", sizeof("abc") - 1, 10, 2.71);
     if(!p.call_bool("verify_index", "a", &b)){
       printf("failed!\n");
       failcount++;
@@ -480,6 +518,7 @@ int main(int argc, char **argv){
 
     printf("testing php_array remove...");
     a.remove("a");
+    a.remove("cee\0\1", sizeof("cee\0\1") - 1);
     b.remove(5);
     if(!p.call_bool("verify_remove", "aa", &a, &b)){
       printf("failed!\n");
@@ -546,9 +585,14 @@ int main(int argc, char **argv){
           if(!subit2.done() && subit2.get_data_type() == IS_DOUBLE
              && subit2.get_key_type() == IS_STRING){
 
+            char *key = subit2.get_key_c_string();
             if(subit2.get_data_double() != 3.14
-              || strcmp(subit2.get_key_c_string(), "x") != 0)
+              || strcmp(key, "x") != 0){
               pass = false;
+            }
+            if(key){
+              free(key);
+            }
           } else {
             pass = false;
           }
@@ -561,6 +605,30 @@ int main(int argc, char **argv){
            && it.get_key_type() == IS_LONG){
           if(it.get_data_bool() || it.get_key_long() != 4)
             pass = false;
+        } else {
+          pass = false;
+        }
+
+        it++;
+        if(!it.done() && it.get_data_type() == IS_STRING 
+           && it.get_key_type() == IS_STRING){
+          unsigned int len;
+          char *str = it.get_key_c_string(&len);
+          if (len != sizeof("a\0.\0.a") - 1 ||
+              memcmp(str, "a\0.\0.a\0", len + 1) != 0){
+            pass=false;
+          }
+          if (str) {
+            free(str);
+          }
+          str = it.get_data_c_string(&len);
+          if (len != sizeof("b\0.\0.b\1") - 1 ||
+              memcmp(str, "b\0.\0.b\1\0", len + 1) != 0) {
+            pass=false;
+          }
+          if (str) {
+            free(str);
+          }
         } else {
           pass = false;
         }

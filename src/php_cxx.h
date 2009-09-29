@@ -1,5 +1,6 @@
 // PHPEmbed header
 // Copyright (c) 2007 Andrew Bosworth, Facebook, inc
+// Modified by Dmitry Zenovich <dzenovich@gmail.com>
 // All rights reserved
 
 #ifndef PHPCXX_H
@@ -80,6 +81,7 @@ public:
   //
   // argspec works as follows:
   // s - string (really char *, must be null terminated!)
+  // S - binary-safe string (char * and unsigned int length)
   // i - int (u32/i32)
   // l - long (u64)
   // d - double
@@ -90,13 +92,19 @@ public:
   // long num = 5;
   // char *str = "blah";
   // double pi = 3.14;
+  // unsigned int resultStrLen;
   // call_xxx("foo", "lsd", num, str, pi);
+  // call_xxx("foo", "S", str, strLen);
+  // call_c_string_ex("foo", &resultStrLen, "lsd", num, str, pi);
   //
   void call_void(char *fn, char *argspec =  "", ...);
   long call_long(char *fn, char *argspec =  "", ...);
   bool call_bool(char *fn, char *argspec =  "", ...);
   double call_double(char *fn, char *argspec =  "", ...);
   char * call_c_string(char *fn, char *argspec =  "", ...);
+  // returns binary-safe string
+  // the string's length will be returned into the resultLen parameter
+  char * call_c_string_ex(char *fn, unsigned int *resultLen = NULL, char *argspec =  "", ...);
   // no int or uint versions since the user can just call_long and truncate
 
   // gotta use this if you're going for nested arrays of any kind

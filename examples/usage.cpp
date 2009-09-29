@@ -1,5 +1,6 @@
 // PHP EMBED tutorial program
 // Copyright (c) 2007 Andrew Bosworth, Facebook, inc
+// Modified by Dmitry Zenovich <dzenovich@gmail.com>
 // All rights reserved
 
 #include "php_stl.h"
@@ -56,26 +57,42 @@ int main(int argc, char **argv){
     case IS_LONG: 
       printf("long %ld => ", it.get_key_long()); 
       break; 
-    case IS_STRING: 
-      printf("string %s => ", it.get_key_c_string()); 
-      break; 
+    case IS_STRING:
+      {
+        char *str = it.get_key_c_string();
+        printf("string %s => ", str);
+        free(str); 
+        break;
+      }
     default: 
-      printf("??? %s => ", it.get_key_c_string()); 
-      break; 
-    } 
+      {
+        char *str = it.get_key_c_string();
+        printf("??? %s => ", it.get_key_c_string()); 
+        free(str);
+        break; 
+      } 
+    }
     switch(it.get_data_type()){ 
     case IS_LONG: 
       printf("long %ld\n", it.get_data_long()); 
       break; 
-    case IS_STRING: 
-      printf("string %s\n", it.get_data_c_string()); 
-      break; 
+    case IS_STRING:
+      { 
+        char *str = it.get_data_c_string();
+        printf("string %s\n", str);
+        free(str); 
+        break; 
+      }
     case IS_DOUBLE: 
       printf("double %f\n", it.get_data_double()); 
       break; 
-    case IS_BOOL: 
-      printf("bool %s\n", it.get_data_c_string()); 
-      break; 
+    case IS_BOOL:
+      {
+        char *str = it.get_data_c_string();
+        printf("bool %s\n", str); 
+        free(str);
+        break; 
+      }
     case IS_ARRAY: 
       printf("Array\n"); 
       {
@@ -84,10 +101,14 @@ int main(int argc, char **argv){
         // now iterate on the sub array! 
       }
       break; 
-    default: 
-      printf("??? %s\n", it.get_data_c_string()); 
-      break; 
-    } 
+    default:
+      {
+        char *str = it.get_data_c_string();
+        printf("??? %s\n", str);
+        free(str); 
+        break;
+      }
+    }
   } 
 
   return 0;

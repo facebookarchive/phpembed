@@ -1,5 +1,6 @@
 // PHPEmbed implementation
 // Copyright (c) 2007 Andrew Bosworth, Facebook, inc
+// Modified by Dmitry Zenovich <dzenovich@gmail.com>
 // All rights reserved
 
 #include "php_cxx.h"
@@ -220,7 +221,23 @@ double php::call_double(char *fn, char *argspec, ...)
 
 char *php::call_c_string(char *fn, char *argspec, ...)
 {
+  char *rrv;
+  va_list ap;
+
+  va_start(ap, argspec);
+  rrv = call_c_string_ex(fn, NULL, argspec, ap);
+  va_end(ap);
+
+  return rrv;
+}
+
+char *php::call_c_string_ex(char *fn, unsigned int* resultStrLen, char *argspec, ...)
+{
   char *rrv = NULL;
+
+  if (resultStrLen) {
+    *resultStrLen = 0;
+  }
 
   PUSH_CTX();
   zval *rv;
@@ -252,7 +269,18 @@ char *php::call_c_string(char *fn, char *argspec, ...)
       convert_to_string_ex(&rv);
     }
 
-    rrv = estrndup(Z_STRVAL_P(rv), Z_STRLEN_P(rv));
+    rrv = (char*) malloc(Z_STRLEN_P(rv)+1);
+    if(rrv == NULL){
+        internal_error("Not enough memory!\n");
+        return NULL;
+    }
+    memcpy(rrv, Z_STRVAL_P(rv), Z_STRLEN_P(rv));
+    rrv[Z_STRLEN_P(rv)] = 0;
+
+    if (resultStrLen) {
+        *resultStrLen = Z_STRLEN_P(rv);
+    }
+
     zval_ptr_dtor(&rv);
   }
 
@@ -565,11 +593,11 @@ char **php::call_c_string_arr(size_t *size, char *fn, char *argspec, ...)
         }
 
         if(copy){
-          rrv[i] = estrndup(Z_STRVAL_P(cp), Z_STRLEN_P(cp));
+          rrv[i] = strndup(Z_STRVAL_P(cp), Z_STRLEN_P(cp));
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[i] = estrndup(Z_STRVAL_PP(data), Z_STRLEN_PP(data));
+          rrv[i] = strndup(Z_STRVAL_PP(data), Z_STRLEN_PP(data));
         }
 
         zend_hash_move_forward(ht);
@@ -884,6 +912,14 @@ php_ret php::parse_args(zval **params, zend_uint *count, char *argspec, va_list 
       }
       break;
 
+    case 'S':
+      {
+        char *arg = va_arg(ap, char *);
+        unsigned int binStrLen = va_arg(ap, unsigned int);
+        ZVAL_STRINGL(params[i], arg, binStrLen, 1);
+      }
+      break;
+
     case 'a':
       {
         php_array *arg = va_arg(ap, php_array *);
@@ -933,7 +969,7 @@ php::~php()
   POP_CTX();
 #ifdef ZTS
   tsrm_mutex_free(lock);
-
+  tsrm_free_interpreter_context(ctx);
   p.clients--;
   if(p.clients == 0 && p.initialized == true){
     p.initialized = false;

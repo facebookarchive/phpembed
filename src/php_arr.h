@@ -1,5 +1,6 @@
 // PHPEmbed array headers
 // Copyright (c) 2007 Andrew Bosworth, Facebook, inc
+// Modified by Dmitry Zenovich <dzenovich@gmail.com>
 // All rights reserved
 
 #ifndef PHPARR_H
@@ -28,6 +29,8 @@ public:
 
   // a copy constructor for proper deep copies
   php_array(const php_array &pa);
+  // an assignment operator uses existing memory (no copies)
+  const php_array& operator=(const php_array &pa);
 
   // Adding data to a php_array can be done with any of the add functions
   //
@@ -49,6 +52,7 @@ public:
   // d - double
   // b - boolean
   // a - array (a POINTER to a php_array object!)
+  // S - binary-safe string (char * followed by an unsigned int length)
   //
   // EX
   // long l1 = 5, l2 = 6;
@@ -56,10 +60,14 @@ public:
   // double pi = 3.14, e = 2.71;
   // bool raining = false;
   // char *also = "one more thing";
+  // char *binary_safe_key = "ke\0y";
+  // char *binary_safe_data = "da\0ta";
   //
   // php_array a();
   // a.add_assoc("sdsb", s1, pi, s2, raining);
   // a.add("s", also);
+  // a.add_assoc("SS", binary_safe_key, 4 /*key length*/,
+  //                   binary_safe_data, 5 /*data length*/);
   //
   // php_array b();
   // b.add_index("ldlb", l1, e, l2, raining);
@@ -70,7 +78,11 @@ public:
 
   // add dictionary entries
   void add_assoc(char *argspec, ...);
-  void remove(char *key);
+
+  // remove data from a php_array by an associative string
+  // provide non-zero value as the len parameter to remove data
+  // by a binary-safe associative string index
+  void remove(char *key, unsigned int len = 0);
 
   // add indexed entries
   void add_index(char *argspec, ...);
@@ -96,8 +108,6 @@ protected:
 private:
 
   zval *array;
-
-  bool free;
 
   // the real functions
   void add_assoc(char *argspec, va_list ap);
@@ -144,12 +154,13 @@ public:
   php_type get_data_type();
 
   // get the data or key at the current position (based on types above)
+  // if the len is non-zero the string's length will be returned into it
   // NOTE: these functions will do conversions wherever necessary and possible
   //       EG string "123" would be returned as the long 123 in get_data_long()
-  char *get_key_c_string();
+  char *get_key_c_string(unsigned int* len = NULL);
   long get_key_long();
 
-  char *get_data_c_string();
+  char *get_data_c_string(unsigned int* len = NULL);
   double get_data_double();
   long get_data_long();
   bool get_data_bool();

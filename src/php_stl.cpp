@@ -1,5 +1,6 @@
 // PHPEmbed STL implementation
 // Copyright (c) 2007 Andrew Bosworth, Facebook, inc
+// Modified by Dmitry Zenovich <dzenovich@gmail.com>
 // All rights reserved
 
 #include "php_stl.h"
@@ -38,7 +39,7 @@ string php_stl::call_string(char *fn, char *argspec, ...)
       convert_to_string_ex(&rv);
     }
 
-    rrv = string(Z_STRVAL_P(rv));
+    rrv = string(Z_STRVAL_P(rv), Z_STRLEN_P(rv));
     zval_ptr_dtor(&rv);
   }
 
@@ -90,11 +91,11 @@ vector<string> php_stl::call_string_vector(char *fn, char *argspec, ...)
         }
 
         if(copy){
-          rrv.push_back(string(Z_STRVAL_P(cp)));
+          rrv.push_back(string(Z_STRVAL_P(cp), Z_STRLEN_P(cp)));
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv.push_back(string(Z_STRVAL_PP(data)));
+          rrv.push_back(string(Z_STRVAL_PP(data), Z_STRLEN_PP(data)));
         }
 
         zend_hash_move_forward(ht);
@@ -464,11 +465,11 @@ set<string> php_stl::call_string_set(char *fn, char *argspec, ...)
         }
 
         if(copy){
-          rrv.insert(string(Z_STRVAL_P(cp)));
+          rrv.insert(string(Z_STRVAL_P(cp), Z_STRLEN_P(cp)));
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv.insert(string(Z_STRVAL_PP(data)));
+          rrv.insert(string(Z_STRVAL_PP(data), Z_STRLEN_PP(data)));
         }
 
         zend_hash_move_forward(ht);
@@ -776,11 +777,11 @@ hash_set<string> php_stl::call_string_hash_set(char *fn, char *argspec, ...)
         }
 
         if(copy){
-          rrv.insert(string(Z_STRVAL_P(cp)));
+          rrv.insert(string(Z_STRVAL_P(cp), Z_STRLEN_P(cp)));
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv.insert(string(Z_STRVAL_PP(data)));
+          rrv.insert(string(Z_STRVAL_PP(data), Z_STRLEN_PP(data)));
         }
 
         zend_hash_move_forward(ht);
@@ -1026,15 +1027,20 @@ map<string, string> php_stl::call_string_string_map(char *fn, char *argspec, ...
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = string(Z_STRVAL_P(cp));
+          rrv[string(str_index, str_len-1)] = string(Z_STRVAL_P(cp),
+                                                     Z_STRLEN_P(cp));
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = string(Z_STRVAL_PP(data));
+          rrv[string(str_index, str_len-1)] = string(Z_STRVAL_PP(data),
+                                                     Z_STRLEN_PP(data));
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -1093,15 +1099,17 @@ map<string, double> php_stl::call_string_double_map(char *fn, char *argspec, ...
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len, &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = Z_DVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = Z_DVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = Z_DVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = Z_DVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -1160,15 +1168,18 @@ map<string, long> php_stl::call_string_long_map(char *fn, char *argspec, ...)
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = Z_LVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = Z_LVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = Z_LVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = Z_LVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -1227,15 +1238,18 @@ map<string, bool> php_stl::call_string_bool_map(char *fn, char *argspec, ...)
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = (bool)Z_LVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = (bool)Z_LVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = (bool)Z_LVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = (bool)Z_LVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -1295,15 +1309,18 @@ map<string, int> php_stl::call_string_int_map(char *fn, char *argspec, ...)
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = (int)Z_LVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = (int)Z_LVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = (int)Z_LVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = (int)Z_LVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -1363,15 +1380,18 @@ map<string, unsigned int> php_stl::call_string_uint_map(char *fn, char *argspec,
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = (unsigned int)Z_LVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = (unsigned int)Z_LVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = (unsigned int)Z_LVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = (unsigned int)Z_LVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -1433,11 +1453,11 @@ map<long, string> php_stl::call_long_string_map(char *fn, char *argspec, ...)
         zend_hash_get_current_key(ht, &str_index, &num_index, 0);
 
         if(copy){
-          rrv[num_index] = string(Z_STRVAL_P(cp));
+          rrv[num_index] = string(Z_STRVAL_P(cp), Z_STRLEN_P(cp));
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[num_index] = string(Z_STRVAL_PP(data));
+          rrv[num_index] = string(Z_STRVAL_PP(data), Z_STRLEN_PP(data));
         }
 
         zend_hash_move_forward(ht);
@@ -1834,15 +1854,19 @@ hash_map<string, string> php_stl::call_string_string_hash_map(char *fn, char *ar
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len, &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = string(Z_STRVAL_P(cp));
+          rrv[string(str_index, str_len-1)] = string(Z_STRVAL_P(cp),
+                                                     Z_STRLEN_P(cp));
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = string(Z_STRVAL_PP(data));
+          rrv[string(str_index, str_len-1)] = string(Z_STRVAL_PP(data),
+                                                     Z_STRLEN_PP(data));
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -1901,15 +1925,18 @@ hash_map<string, double> php_stl::call_string_double_hash_map(char *fn, char *ar
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = Z_DVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = Z_DVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = Z_DVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = Z_DVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -1968,15 +1995,18 @@ hash_map<string, long> php_stl::call_string_long_hash_map(char *fn, char *argspe
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = Z_LVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = Z_LVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = Z_LVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = Z_LVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -2035,15 +2065,18 @@ hash_map<string, bool> php_stl::call_string_bool_hash_map(char *fn, char *argspe
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = (bool)Z_LVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = (bool)Z_LVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = (bool)Z_LVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = (bool)Z_LVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -2103,15 +2136,18 @@ hash_map<string, int> php_stl::call_string_int_hash_map(char *fn, char *argspec,
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = (int)Z_LVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = (int)Z_LVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = (int)Z_LVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = (int)Z_LVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -2171,15 +2207,18 @@ hash_map<string, unsigned int> php_stl::call_string_uint_hash_map(char *fn, char
         // extract the corresponding key too (just str for now)
         char *str_index;
         ulong num_index;
-        zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+        uint  str_len;
+        zend_hash_get_current_key_ex(ht, &str_index, &str_len,
+                                     &num_index, 1, NULL);
 
         if(copy){
-          rrv[str_index] = (unsigned int)Z_LVAL_P(cp);
+          rrv[string(str_index, str_len-1)] = (unsigned int)Z_LVAL_P(cp);
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[str_index] = (unsigned int)Z_LVAL_PP(data);
+          rrv[string(str_index, str_len-1)] = (unsigned int)Z_LVAL_PP(data);
         }
+        efree(str_index);
 
         zend_hash_move_forward(ht);
       }
@@ -2241,11 +2280,11 @@ hash_map<long, string> php_stl::call_long_string_hash_map(char *fn, char *argspe
         zend_hash_get_current_key(ht, &str_index, &num_index, 1);
 
         if(copy){
-          rrv[num_index] = string(Z_STRVAL_P(cp));
+          rrv[num_index] = string(Z_STRVAL_P(cp), Z_STRLEN_P(cp));
           zval_ptr_dtor(&cp);
           copy = false;
         } else {
-          rrv[num_index] = string(Z_STRVAL_PP(data));
+          rrv[num_index] = string(Z_STRVAL_PP(data), Z_STRLEN_PP(data));
         }
 
         zend_hash_move_forward(ht);

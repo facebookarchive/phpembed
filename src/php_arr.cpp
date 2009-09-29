@@ -1,5 +1,6 @@
 // PHPEmbed array implementation
 // Copyright (c) 2007 Andrew Bosworth, Facebook, inc
+// Modified by Dmitry Zenovich <dzenovich@gmail.com>
 // All rights reserved
 
 #include "php_arr.h"
@@ -9,13 +10,11 @@
 php_array::php_array(){
   MAKE_STD_ZVAL(array);
   array_init(array);
-  free = true;
 }
 
 // destroy the array
 php_array::~php_array(){
-  if(free)
-    zval_ptr_dtor(&array);
+  zval_ptr_dtor(&array);
 }
 
 // copy an existing array
@@ -24,15 +23,12 @@ php_array::php_array(zval *val){
   *array = *val;
   zval_copy_ctor(array);
   INIT_PZVAL(array);
-  free = true;
 }
 
 // just use an existing array (no copy)
 php_array::php_array(zval **val){
-  MAKE_STD_ZVAL(array);
+  zval_add_ref(val);
   array = *val;
-  INIT_PZVAL(array);
-  free = false;
 }
 
 // copy constructor for deep copying of zval
@@ -41,9 +37,14 @@ php_array::php_array(const php_array &pa){
   *array = *(pa.array);
   zval_copy_ctor(array);
   INIT_PZVAL(array);
-  free = true;
 };
 
+const php_array& php_array::operator=(const php_array &pa){
+  zval_ptr_dtor(&array);
+  array = pa.array;
+  zval_add_ref(&array);
+  return *this;
+}
 
 // a wrapper for the other version of add assoc
 void php_array::add_assoc(char *argspec, ...){
@@ -58,7 +59,6 @@ void php_array::add_assoc(char *argspec, ...){
   add_assoc(argspec, ap);
   va_end(ap);
 }
-
 
 // parse a variable argument list into the associative array
 void php_array::add_assoc(char *argspec, va_list ap){
@@ -80,13 +80,32 @@ void php_array::add_assoc(char *argspec, va_list ap){
   }
 
   bool even = true;
+  char *key, *realKey;
+  unsigned int key_len = 0;
+  bool freeKey = false;
   for(char *trav = argspec; *trav; trav++)
   {
-    char *key;
 
-    if(even && *trav != 's'){
+    if(even && *trav != 's' && *trav != 'S') {
       fprintf(stderr, "every other associative argument must be a string\n");
       return;
+    }
+
+    if(!even) {
+      if (key_len == 0) {
+        key_len = strlen(key) + 1;
+        realKey = key;
+      } else {
+        realKey = (char*) malloc(key_len + 1);
+        if (realKey == NULL) {
+          fprintf(stderr, "not enough memory\n");
+          return;
+        }
+        freeKey = true;
+        memcpy(realKey, key, key_len);
+        realKey[key_len] = 0;
+        key_len++;
+      }
     }
 
     switch(*trav)
@@ -95,28 +114,28 @@ void php_array::add_assoc(char *argspec, va_list ap){
         {
           // va promotes bools to ints
           int arg = va_arg(ap, int);
-          add_assoc_bool(array, key, arg);
+          add_assoc_bool_ex(array, realKey, key_len, arg);
         }
         break;
 
       case 'i':
         {
           int arg = va_arg(ap, int);
-          add_assoc_long(array, key, arg);
+          add_assoc_long_ex(array, realKey, key_len, arg);
         }
         break;
 
       case 'l':
         {
           long arg = va_arg(ap, long);
-          add_assoc_long(array, key, arg);
+          add_assoc_long_ex(array, realKey, key_len, arg);
         }
         break;
 
       case 'd':
         {
           double arg = va_arg(ap, double);
-          add_assoc_double(array, key, arg);
+          add_assoc_double_ex(array, realKey, key_len, arg);
         }
         break;
 
@@ -124,10 +143,24 @@ void php_array::add_assoc(char *argspec, va_list ap){
         {
           char *arg = va_arg(ap, char *);
 
-          if(even)
+          if(even) {
             key = arg;
-          else
-            add_assoc_string(array, key, arg, true);
+            key_len = 0;
+          } else {
+            add_assoc_string_ex(array, realKey, key_len, arg, true);
+          }
+        }
+        break;
+      case 'S':
+        {
+          char *arg = va_arg(ap, char *);
+          if(even) {
+            key = arg;
+            key_len = va_arg(ap, long);
+          } else {
+            long str_len = va_arg(ap, long);
+            add_assoc_stringl_ex(array, realKey, key_len, arg, str_len, true);
+          }
         }
         break;
 
@@ -146,7 +179,8 @@ void php_array::add_assoc(char *argspec, va_list ap){
           zval_copy_ctor(data);
           INIT_PZVAL(data);
 
-          add_assoc_zval(array, key, data);
+          add_assoc_zval_ex(array, realKey, key_len, data);
+          key_len = 0;
         }
         break;
 
@@ -155,13 +189,33 @@ void php_array::add_assoc(char *argspec, va_list ap){
         return;
     }
 
+    if (freeKey) {
+      free(realKey);
+      freeKey = false;
+    }
+
+    if (!even) {
+      key_len = 0;
+    }
+
     even = !even;
   }
 }
 
 // remove value associated with key from the array based on string
-void php_array::remove(char *key){
-  zend_hash_del(Z_ARRVAL_P(array), key, strlen(key) + 1);
+// provide non-zero value as the len parameter to remove data
+// by a binary-safe associative string index
+void php_array::remove(char *key, unsigned int len){
+  char *nkey = key;
+  if(!len){
+    len = strlen(key);
+  } else {
+    nkey = estrndup(key, len);
+  }
+  zend_hash_del(Z_ARRVAL_P(array), nkey, len+1);
+  if(nkey!=key){
+    efree(nkey);
+  }
 }
 
 
@@ -240,6 +294,13 @@ void php_array::add_index(char *argspec, va_list ap){
         }
         break;
 
+      case 'S':
+        {
+          char *arg = va_arg(ap, char *);
+          uint str_len = va_arg(ap, uint);
+          add_index_stringl(array, index, arg, str_len, true);
+        }
+        break;
       case 'a':
         {
           php_array *arg = va_arg(ap, php_array *);
@@ -337,6 +398,14 @@ void php_array::add_enum(char *argspec, va_list ap){
         }
         break;
 
+      case 'S':
+        {
+          char *arg = va_arg(ap, char *);
+          uint str_len = va_arg(ap, uint);
+          add_next_index_stringl(array, arg, str_len, true);
+        }
+        break;
+
       case 'a':
         {
           php_array *arg = va_arg(ap, php_array *);
@@ -414,18 +483,36 @@ php_type php_iterator::get_key_type(){
   }
 }
 
-char *php_iterator::get_key_c_string(){
+// if the len is non-zero the string's length will be returned into it
+char *php_iterator::get_key_c_string(uint *len){
   char *str_index;
   ulong num_index;
+  uint key_len;
+  char *rrv;
+
+  if(len != NULL){
+    *len = 0;
+  }
 
   if(done()){
     fprintf(stderr, "ERROR: iterator doesn't point to a valid entry!\n");
     return NULL;
   }
 
-  zend_hash_get_current_key(ht, &str_index, &num_index, 1);
+  zend_hash_get_current_key_ex(ht, &str_index, &key_len, &num_index, 0, NULL);
+  rrv = (char*) malloc(key_len);
+  if(rrv == NULL){
+    fprintf(stderr, "ERROR: not enough memory!\n");
+    return NULL;
+  }
 
-  return str_index;
+  memcpy(rrv, str_index, key_len);
+  
+  if (len != NULL) {
+    *len = key_len - 1;
+  }
+
+  return rrv;
 }
 
 long php_iterator::get_key_long(){
@@ -458,8 +545,15 @@ php_type php_iterator::get_data_type(){
   return Z_TYPE_PP(data);
 }
 
-char *php_iterator::get_data_c_string(){
+//if the len is non-zero the string's length will be returned into it
+char *php_iterator::get_data_c_string(uint* len){
   zval **data;
+  char *result;
+  uint internalLen = 0;
+
+  if(len != NULL){
+    *len = 0;
+  }
 
   if(done()){
     fprintf(stderr, "ERROR: iterator doesn't point to a valid entry!\n");
@@ -477,7 +571,18 @@ char *php_iterator::get_data_c_string(){
     convert_to_string_ex(data);
   }
 
-  return estrndup(Z_STRVAL_PP(data), Z_STRLEN_PP(data));
+  internalLen = Z_STRLEN_PP(data);
+  result = (char*) malloc(internalLen + 1);
+  if(result == NULL){
+    fprintf(stderr, "ERROR: not enough memory!\n");
+    return NULL;
+  }
+
+  if (len != NULL) {
+    *len = internalLen;
+  }
+
+  return (char*)memcpy((void*)result, (void*)Z_STRVAL_PP(data), internalLen+1);
 }
 
 double php_iterator::get_data_double(){

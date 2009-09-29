@@ -1,5 +1,6 @@
 // PHP EMBED example program
 // Copyright (c) 2007 Andrew Bosworth, Facebook, inc
+// Modified by Dmitry Zenovich <dzenovich@gmail.com>
 // All rights reserved
 
 #include "php_stl.h"
@@ -31,8 +32,10 @@ int main(int argc, char **argv){
   // an example of calling into a function with C arguments
   long tre = 3;
   char *tres = p.call_c_string("trivial_func", "sld", "answer: ", tre, 4.5);
-  if(tres)
+  if(tres){
     printf("%s\n", tres);
+    free(tres);
+  }
   printf("\n");
 
   // this test function returns a string, but we call_long so it converts it
@@ -80,15 +83,18 @@ void print_php_array(php_array &a, int depth){
     for(int i = 0; i < depth; i++)
       printf(" ");
 
+    char *str;
     switch(it.get_key_type()){
     case IS_LONG:
       printf("long %ld => ", it.get_key_long());
       break;
     case IS_STRING:
-      printf("string %s => ", it.get_key_c_string());
+      printf("string %s => ", str = it.get_key_c_string());
+      free(str);
       break;
     default:
-      printf("??? %s => ", it.get_key_c_string());
+      printf("??? %s => ", str = it.get_key_c_string());
+      free(str);
       break;
     }
 
@@ -97,13 +103,15 @@ void print_php_array(php_array &a, int depth){
       printf("long %ld\n", it.get_data_long());
       break;
     case IS_STRING:
-      printf("string %s\n", it.get_data_c_string());
+      printf("string %s\n", str = it.get_data_c_string());
+      free(str);
       break;
     case IS_DOUBLE:
       printf("double %f\n", it.get_data_double());
       break;
     case IS_BOOL:
-      printf("bool %s\n", it.get_data_c_string());
+      printf("bool %s\n", str = it.get_data_c_string());
+      free(str);
       break;
     case IS_ARRAY:
       printf("Array\n");
@@ -113,7 +121,8 @@ void print_php_array(php_array &a, int depth){
       }
       break;
     default:
-      printf("??? %s\n", it.get_data_c_string());
+      printf("??? %s\n", str = it.get_data_c_string());
+      free(str);
       break;
     }
 
