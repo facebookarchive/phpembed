@@ -156,9 +156,9 @@ void php_array::add_assoc(char *argspec, va_list ap){
           char *arg = va_arg(ap, char *);
           if(even) {
             key = arg;
-            key_len = va_arg(ap, long);
+            key_len = va_arg(ap, unsigned int);
           } else {
-            long str_len = va_arg(ap, long);
+            unsigned int str_len = va_arg(ap, unsigned int);
             add_assoc_stringl_ex(array, realKey, key_len, arg, str_len, true);
           }
         }
