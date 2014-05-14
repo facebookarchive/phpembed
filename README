@@ -1,3 +1,13 @@
+Archived Repo
+=============
+This is an archived project and is no longer supported or updated by Facebook. 
+Please do not file issues or pull-requests against this repo. If you wish to 
+continue to develop this code, we recommend you fork it.
+
+Proceed and be bold!
+
+---------
+
 PHPEMBED (Simplified API built on top of PHP SAPI)
 
 Andrew Bosworth (boz@facebook.com)
